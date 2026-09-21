@@ -1,0 +1,19 @@
+'use client';
+import Link from 'next/link';
+import HomeLink from './HomeLink';
+import LanguageSwitch from './LanguageSwitch';
+import {useEffect,useRef,useState} from 'react';
+import {ArrowUpRight,Menu,X} from 'lucide-react';
+export default function Header({locale,page}:{locale:'fr'|'ar';page:string}){
+ const ar=locale==='ar';const [open,setOpen]=useState(false);const [scrolled,setScrolled]=useState(false);const trigger=useRef<HTMLButtonElement>(null);const panel=useRef<HTMLElement>(null);
+ const links=[['',ar?'الرئيسية':'Accueil'],['mariee',ar?'العروس':'La mariée'],['prestations',ar?'الخدمات والأسعار':'Prestations & tarifs'],['produits',ar?'المنتجات':'Produits'],['le-salon',ar?'الصالون':'Le salon']];
+ const url=(p:string,l=locale)=>`/${l}${p?'/'+p:''}`;
+ useEffect(()=>{const onScroll=()=>setScrolled(window.scrollY>20);onScroll();window.addEventListener('scroll',onScroll,{passive:true});return()=>window.removeEventListener('scroll',onScroll)},[]);
+ useEffect(()=>{setOpen(false)},[page,locale]);
+ useEffect(()=>{const screen=matchMedia('(min-width:901px)');const close=()=>{if(screen.matches)setOpen(false)};screen.addEventListener('change',close);return()=>screen.removeEventListener('change',close)},[]);
+ useEffect(()=>{if(!open)return;const previous=document.body.style.overflow;document.body.style.overflow='hidden';panel.current?.querySelector<HTMLElement>('a')?.focus();const handler=(e:KeyboardEvent)=>{if(e.key==='Escape'){setOpen(false);trigger.current?.focus()}if(e.key==='Tab'){const nodes=[trigger.current,...Array.from(panel.current?.querySelectorAll<HTMLElement>('a,button')||[])].filter(Boolean) as HTMLElement[];const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}};document.addEventListener('keydown',handler);return()=>{document.body.style.overflow=previous;document.removeEventListener('keydown',handler)}},[open]);
+ return <><header className={`site-header ${!page?'over-film':''} ${scrolled?'is-scrolled':''}`}><div className="header-inner"><HomeLink className="brand header-brand" href={url('')} aria-label={ar?'OHH ZAZ — الرئيسية':'OHH ZAZ — Accueil'}><span>OHH ZAZ</span><small>SALON <i>by SIHAM</i></small></HomeLink><nav className="header-nav" aria-label={ar?'القائمة الرئيسية':'Navigation principale'}>{links.map(([p,n])=>p?<Link key={p} aria-current={page===p?'page':undefined} href={url(p)}>{n}</Link>:<HomeLink key={p} aria-current={!page?'page':undefined} href={url('')}>{n}</HomeLink>)}</nav><div className="header-controls"><LanguageSwitch locale={locale} page={page}/><Link href={url('contact')} className="header-cta">{ar?'موعدكِ':'Votre rendez-vous'}<ArrowUpRight size={15}/></Link><button ref={trigger} className="nav-toggle" aria-label={open?(ar?'إغلاق القائمة':'Fermer le menu'):(ar?'فتح القائمة':'Ouvrir le menu')} aria-expanded={open} aria-controls="navigation-mobile" onClick={()=>setOpen(!open)}>{open?<X size={22}/>:<Menu size={22}/>}</button></div></div></header>{open&&<><div className="nav-backdrop" onClick={()=>setOpen(false)} aria-hidden="true"/><nav id="navigation-mobile" ref={panel} className="nav-panel" aria-label={ar?'القائمة الرئيسية':'Navigation principale'}><p className="eyebrow">{ar?'دار الجمال · الدار البيضاء':'MAISON DE BEAUTÉ · CASABLANCA'}</p>{links.map(([p,n],i)=><HomeLink key={p} href={url(p)} aria-current={page===p?'page':undefined} onClick={()=>setOpen(false)}><small>0{i+1}</small><span>{n}</span><ArrowUpRight size={21}/></HomeLink>)}<Link className="button" href={url('contact')} onClick={()=>setOpen(false)}>{ar?'لنتحدث عنكِ':'Parlons de vous'}<ArrowUpRight size={17}/></Link><p className="nav-hours">{ar?'الإثنين — السبت · مغلق الأحد':'Lundi — samedi · Fermé le dimanche'}</p></nav></>}</>;
+}
+
+
+

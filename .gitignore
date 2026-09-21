@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.npm-cache/
+.tmp/
+.env*
+!.env.example
+work/
+*.tsbuildinfo
+.netlify/
+*.log
+.DS_Store
+Thumbs.db

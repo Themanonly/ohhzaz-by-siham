@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+[context.deploy-preview.environment]
+  SITE_INDEXABLE = "false"
+
+[context.branch-deploy.environment]
+  SITE_INDEXABLE = "false"

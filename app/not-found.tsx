@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function NotFound(){return <main className="section contact page-start"><p className="eyebrow">OHH ZAZ · 404</p><h1>Un autre chemin.<br/><span lang="ar" dir="rtl">لنختَر طريقاً آخر.</span></h1><p>Cette page n’existe pas. Retrouvez l’univers OHH ZAZ depuis l’accueil.</p><div className="hero-links"><Link className="button" href="/fr">Retour à l’accueil ↗</Link><Link className="text-link" href="/ar" lang="ar">الرئيسية ←</Link></div></main>}

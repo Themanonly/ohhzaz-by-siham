@@ -1,0 +1,99 @@
+[
+  {
+    "name": "texture",
+    "source": "BACKGROUND",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "texture-mobile",
+    "source": "MOBILE BACKGROUND",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "bridal",
+    "source": "ohh_zaz_1703590747_3266278382856800649_44080976396.jpg",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "hair",
+    "source": "ohh_zaz_1672671843_3006911818542759018_44080976396.webp",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "nails",
+    "source": "ohh_zaz_1673696529_3015507509422632347_44080976396.webp",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "makeup",
+    "source": "ohh_zaz_1672405105_3004674261142565640_44080976396.webp",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "hair-detail",
+    "source": "ohh_zaz_1684532125_3106403078005634521_44080976396.jpg",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "nails-detail",
+    "source": "ohh_zaz_1672913975_3008942973639103879_44080976396.webp",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "occasion",
+    "source": "ohh_zaz_1672404271_3004667264691332198_44080976396.webp",
+    "publicationConsent": "pending",
+    "usage": "local-preview"
+  },
+  {
+    "name": "hero-upscaled",
+    "source": "C:/Users/naouf/Downloads/ohh_zaz_1703590747_3266278382856800649_44080976396.jpg",
+    "width": 3456,
+    "height": 4320,
+    "derivatives": [
+      640,
+      1000,
+      1600
+    ],
+    "usage": "owner-requested hero replacement"
+  },
+  {
+    "name": "bridal-updo",
+    "source": "ohh_zaz_2024-12-03_21-15-08_3515136178342220609_44080976396.jpg",
+    "width": 1440,
+    "height": 1800,
+    "usage": "local-preview",
+    "publicationConsent": "pending"
+  },
+  {
+    "name": "bridal-occasion",
+    "source": "ohh_zaz_2023-10-12_21-05-27_3212175054363481204_44080976396.jpg",
+    "width": 1080,
+    "height": 1350,
+    "usage": "local-preview",
+    "publicationConsent": "pending"
+  },
+  {
+    "name": "bridal-waves",
+    "source": "ohh_zaz_2020-11-09_19-32-11_2438792401379455171_44080976396.jpg",
+    "width": 1080,
+    "height": 1080,
+    "usage": "local-preview",
+    "publicationConsent": "pending"
+  },
+  {
+    "name": "salon-interior-12",
+    "source": "owner salon video at 00:12",
+    "width": 1280,
+    "height": 720,
+    "usage": "local-preview"
+  }
+]

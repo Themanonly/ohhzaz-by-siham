@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import sharp from 'sharp';
+const source='C:/Users/naouf/Downloads/ohh_zaz_1703590747_3266278382856800649_44080976396.jpg';
+for(const width of [640,1000,1600]) await sharp(source).rotate().resize({width}).webp({quality:88}).toFile(`public/media/hero-upscaled-${width}.webp`);
+const p='components/Salon.tsx';let s=fs.readFileSync(p,'utf8');
+s=s.replace("import Link from 'next/link';","import Link from 'next/link';\nimport PriceMenu from './PriceMenu';\nimport OpeningHours from './OpeningHours';");
+s=s.replace('src="/media/bridal.webp"','src="/media/hero-upscaled-1000.webp" srcSet="/media/hero-upscaled-640.webp 640w, /media/hero-upscaled-1000.webp 1000w, /media/hero-upscaled-1600.webp 1600w" sizes="(max-width: 760px) 73vw, 31vw" width={1000} height={1250}');
+s=s.replace("<Link href={url('contact')} className=\"service-card\"", "<Link href={url('prestations')+'#tarifs'} className=\"service-card\"");
+s=s.replace('{page&&<p className="price-note">{t.price}</p>}',`{!page&&<Link className="text-link prices-link" href={url('prestations')+'#tarifs'}>{ar?'الخدمات والأسعار':'Toutes les prestations & tarifs'}<ArrowRight size={16}/></Link>}`);
+s=s.replace("{(page===''||page==='mariee')", "{page==='prestations'&&<PriceMenu locale={locale}/>}\n{(page===''||page==='mariee')");
+s=s.replace('<div className="location-line"><MapPin size={16}/><span>{t.address}</span></div>','<div className="location-line"><MapPin size={16}/><span>{t.address}</span></div><OpeningHours locale={locale}/>');
+s=s.replace('Casablanca 20330</span></div></section>}', 'Casablanca 20330</span></div><OpeningHours locale={locale}/></section>}');
+s=s.replace('Les disponibilités et les tarifs sont confirmés directement avec le salon.','Consultez notre carte de prestations et confirmez votre disponibilité directement avec le salon.');
+s=s.replace('Les tarifs, durées et prestations disponibles sont à confirmer directement avec le salon.','Consultez la page Prestations pour les tarifs. Les prix « à partir de » et les options de soin sont précisés avec le salon.');
+s=s.replace('تُؤكّد الأسعار والمواعيد مباشرة مع الصالون.','اكتشفي قائمة الخدمات والأسعار وأكّدي الموعد مباشرة مع الصالون.');
+s=s.replace('تُؤكّد الأسعار والمدد والخدمات المتاحة مباشرة مع الصالون.','الأسعار متوفرة في صفحة الخدمات. تُحدّد الأسعار الابتدائية وخيارات العناية مع الصالون.');
+fs.writeFileSync(p,s);
+const manifest=JSON.parse(fs.readFileSync('docs/media-manifest.json','utf8'));manifest.push({name:'hero-upscaled',source,width:3456,height:4320,derivatives:[640,1000,1600],usage:'owner-requested hero replacement'});fs.writeFileSync('docs/media-manifest.json',JSON.stringify(manifest,null,2));

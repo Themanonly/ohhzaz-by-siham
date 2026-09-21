@@ -1,0 +1,255 @@
+/* OHH ZAZ: mineral textures, warm metal details and a bridal keepsake album. */
+:root{--atelier-texture:linear-gradient(110deg,#f5eddf85,#faf6eeae),url('/media/texture.webp');--atelier-gold:#a88b61}
+::selection{background:#d6c09b;color:#30261d}
+a,button{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid #a27944;outline-offset:5px}
+.button,.header-cta{border-radius:999px;min-height:52px;gap:25px;padding:16px 25px;transition:background .25s,color .25s,box-shadow .25s,transform .25s}
+.button svg,.header-cta svg,.text-link svg,.film-link svg{transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+@media(hover:hover){.button:hover,.header-cta:hover{transform:translateY(-2px);box-shadow:0 7px 19px #39271d15}.button:hover svg,.header-cta:hover svg,.text-link:hover svg,.film-link:hover svg{transform:translate(3px,-3px)}}
+.text-link{padding-block:10px;min-height:44px;align-items:center}
+.site-header{background:#f9f5eef5;transition:background .35s,box-shadow .35s,color .35s}
+.header-inner{display:grid;grid-template-columns:1fr auto 1fr;height:100px;padding-inline:4.2%;gap:22px}
+.header-brand{grid-column:2;grid-row:1;text-align:center;min-width:180px}
+.header-brand>span{font-size:39px;letter-spacing:2px}
+.header-brand small{font-size:7px;letter-spacing:3px}
+.header-nav{grid-column:1;grid-row:1;gap:23px}
+.header-nav>a{font-family:var(--serif);font-size:19px;white-space:nowrap}
+.header-controls{grid-column:3;grid-row:1;justify-content:flex-end;gap:15px}
+.header-cta{font-size:11px;padding:13px 21px;min-height:48px}
+.language-switch{background:transparent}
+.site-header.over-film{margin-bottom:-101px;background:transparent;backdrop-filter:none;border-color:#fff4df42;color:#fff9ef}
+.site-header.over-film:not(.is-scrolled) .header-cta{background:#f0e4cf;color:#392b20}
+.site-header.over-film:not(.is-scrolled) .language-switch{border-color:#f1e4cd77}
+.site-header.over-film:not(.is-scrolled) .language-switch a{color:#fff9ef}
+.site-header.over-film:not(.is-scrolled) .language-switch a[aria-current=true]{background:#f0e4cf;color:#392b20}
+.site-header.over-film:not(.is-scrolled) .nav-toggle{border-color:#f1e4cd77;color:#fff9ef}
+.site-header.over-film:not(.is-scrolled) .header-nav>a:after{background:#efe2cc}
+.site-header.over-film.is-scrolled{background:#faf6eff5;color:var(--espresso);backdrop-filter:blur(16px)}
+.film-hero{height:100svh;min-height:740px}
+.film-veil{background:linear-gradient(180deg,#1915107d,transparent 30%),linear-gradient(90deg,#17140ebd,#17140e55 52%,#17140e15),linear-gradient(0deg,#17140e7a,transparent 35%)}
+.film-copy{margin-top:45px}
+.film-actions .button{border-radius:999px;font-size:12px}
+.film-link{border-radius:999px;border:1px solid #efe3cf99;padding:17px 24px;min-height:52px}
+.intro{background-image:var(--atelier-texture);position:relative}
+.intro>svg{filter:drop-shadow(0 5px 12px #ad8a5230)}
+.discovery{background:linear-gradient(#f6f0e4bd,#f5efe4d4),url('/media/texture.webp') center/cover}
+.discovery-card{background:transparent;border-bottom:1px solid #bfa98966}
+.discovery-image{border-radius:110px 12px 12px 12px;height:370px}
+.discovery-card:nth-child(2) .discovery-image{border-radius:12px 12px 110px 12px}
+.discovery-card:nth-child(3) .discovery-image{border-radius:12px 110px 12px 12px}
+.discovery-content{padding-inline:6px}
+.discovery-number{background:#f8f1e8e8;color:#4b3826;width:39px;height:39px;border-radius:50%;display:grid;place-items:center;font-size:20px;text-shadow:none}
+.discovery-extras>a{border-radius:10px 42px 10px 42px;transition:background-color .3s,box-shadow .3s}
+.discovery-extras>a:hover{box-shadow:0 12px 25px #4c342c0c;background-color:#e8d8bd}
+.discovery-link{font-size:12px}
+.real-interior{background:var(--atelier-texture) center/cover}
+.interior-editorial{grid-template-columns:1.25fr 1fr;gap:7%;align-items:center}
+.interior-main-photo{height:auto;aspect-ratio:1.45;border-radius:90px 8px 8px 8px;overflow:hidden;box-shadow:0 25px 50px #55412a15}
+.interior-main-photo img{object-position:center;transition:transform 1s}
+.interior-main-photo:hover img{transform:scale(1.025)}
+.interior-main-photo>span{border-radius:99px}
+.interior-details{padding-top:30px;border-top:1px solid #b5a08255}
+.interior-details figure img{border-radius:8px 8px 50px 8px}
+.interior-story h1{font-size:clamp(44px,4.5vw,68px);line-height:1.04}
+.contact{background:var(--atelier-texture) center/cover;max-width:none}
+.faq{background:linear-gradient(#faf7f1a8,#faf7f1c9),url('/media/texture.webp') center/cover}
+.faq-item button{transition:color .2s;padding-block:25px}
+.faq-item button:hover{color:#9b7645}
+.faq-item button[aria-expanded=true]{color:#8b6639}
+.price-group{border-top:1px solid #bca38166}
+.price-group h3{font-style:italic}
+.price-row{transition:background .2s;padding-inline:10px}
+.price-row:hover{background:#e6d6bd29}
+.gallery-item{border-radius:9px 9px 65px 9px;overflow:hidden}
+.gallery-item:nth-child(even){border-radius:65px 9px 9px 9px}
+footer{background-image:linear-gradient(#332719ed,#332719ed),url('/media/texture.webp');background-size:cover}
+footer .button.light{border-color:#c3ab85;color:#f5ead7}
+
+.bridal-editorial{position:relative;isolation:isolate;display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:4%;padding:85px 9% 105px;background:var(--atelier-texture) center/cover;overflow:hidden;min-height:790px}
+.bridal-editorial::before{content:'';position:absolute;width:450px;height:450px;background:#b9935540;filter:blur(110px);border-radius:50%;inset-inline-end:-150px;top:100px;z-index:-1}
+.bridal-orbit{position:absolute;width:680px;height:880px;border:1px solid #a98c5745;border-radius:50%;inset-inline-end:-170px;top:-90px;transform:rotate(28deg);z-index:-1}
+.bridal-editorial-copy{position:relative;z-index:2;padding-bottom:30px}
+.bridal-editorial-copy>.eyebrow{font-size:10px;letter-spacing:2.5px;color:#836844;margin-bottom:29px}
+.bridal-editorial h1,.bridal-editorial h2{font-family:var(--serif);font-size:clamp(62px,6.1vw,102px);font-weight:400;line-height:.95;letter-spacing:-2px;color:#453322}
+.bridal-editorial h1 em,.bridal-editorial h2 em{font-weight:400;color:#8f6f46}
+.bridal-lead{max-width:340px;font-size:14px;line-height:1.85;margin:30px 0;color:#72604a}
+.bridal-editorial .button{background:#4a3726;color:#fbf3e5;border-color:#4a3726;font-size:12px}
+.bridal-editorial .button:hover{background:#765b3c}
+.bridal-explore{display:flex;align-items:center;gap:16px;font-size:11px;margin-top:19px;padding:7px 0;min-height:40px;width:fit-content}
+.bridal-handwriting{display:block;font-family:var(--serif);font-style:italic;font-size:25px;color:#96774e;margin-top:37px}
+.bridal-editorial-visual{position:relative;padding-inline-start:50px;max-width:570px;width:100%;justify-self:end}
+.bridal-portrait-frame{height:600px;border-radius:190px 190px 12px 12px;overflow:hidden;box-shadow:0 22px 45px #51381921;outline:1px solid #b3997555;outline-offset:11px}
+.bridal-portrait-frame>img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.bridal-editorial-visual:hover .bridal-portrait-frame>img{transform:scale(1.025)}
+.portrait-caption{display:block;text-align:end;font-size:8px;letter-spacing:2px;margin-top:24px;color:#806b4f}
+.bridal-detail-print{position:absolute;width:155px;inset-inline-start:-48px;bottom:38px;padding:8px 8px 0;background:#fcf7ee;box-shadow:0 12px 25px #4530212b;transform:rotate(-8deg);transition:transform .5s;margin:0}
+.bridal-detail-print:hover{transform:rotate(-3deg) translateY(-5px)}
+.bridal-detail-print img{width:100%;height:175px;object-fit:cover;border-radius:2px}
+.bridal-detail-print figcaption{font-family:var(--serif);font-style:italic;font-size:17px;text-align:center;padding:10px 0 13px}
+.bridal-spark{color:#b79b6b;width:40px;height:40px}
+.bridal-editorial>.bridal-spark{position:absolute;z-index:2;pointer-events:none}
+.spark-one{top:10%;inset-inline-end:9%;width:58px;height:58px;animation:spark-arrive 1.8s ease both}
+.spark-two{bottom:8%;inset-inline-start:43%;width:25px;height:25px;animation:spark-arrive 2s .3s ease both}
+@keyframes spark-arrive{from{transform:rotate(-80deg) scale(.4);opacity:0}to{transform:rotate(0) scale(1);opacity:1}}
+.bridal-album{background:#f9f5ed;padding-block:100px}
+.album-heading{display:grid;grid-template-columns:1fr 1fr;column-gap:15%;align-items:end;margin-bottom:55px}
+.album-heading>.eyebrow{grid-column:1/-1;margin-bottom:20px}
+.album-heading h2,.preparation-intro h2{font-size:clamp(48px,5vw,75px);line-height:1.02;font-weight:400}
+.album-heading h2 em,.preparation-intro h2 em{font-weight:400;color:#987d55}
+.album-heading>p:not(.eyebrow){font-size:13px;line-height:1.9;color:var(--muted);max-width:360px;padding-bottom:5px}
+.album-layout{display:grid;grid-template-columns:240px 1fr;gap:55px;align-items:center}
+.album-choices{display:flex;flex-direction:column;gap:0}
+.album-choices>button{display:flex;gap:15px;align-items:center;text-align:start;padding:25px 0;background:none;border:0;border-bottom:1px solid #c5b79f;color:#8b7b64;min-height:76px;transition:color .3s}
+.album-choices>button>span:first-child{font-size:9px}
+.album-choices>button>span:nth-child(2){font-family:var(--serif);font-size:29px;flex:1}
+.album-choices>button svg{width:17px;opacity:0;transform:translate(-6px,6px);transition:transform .3s,opacity .3s}
+.album-choices>button[aria-selected=true]{color:#443021;border-bottom-color:#6e5130}
+.album-choices>button[aria-selected=true] svg{opacity:1;transform:none}
+.album-panel{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center;min-width:0}
+.album-panel figure{margin:0;animation:album-enter .55s ease both}
+.album-panel figure>img{height:420px;width:100%;object-fit:cover;border-radius:8px 80px 8px 8px}
+.album-panel figure>figcaption{font-size:8px;letter-spacing:1.5px;color:#8b775d;margin-top:17px}
+.album-story{animation:album-enter .6s ease both}
+.album-story>.bridal-spark{width:29px;height:29px;margin-bottom:25px}
+.album-story h3{font-size:37px;line-height:1.08;font-weight:400}
+.album-story>p{font-size:13px;line-height:1.95;color:var(--muted);margin:22px 0}
+.album-story .text-link{font-size:11px}
+@keyframes album-enter{from{opacity:.25;transform:translateY(12px)}to{opacity:1;transform:none}}
+.bridal-preparation{display:grid;grid-template-columns:1fr 1fr;gap:12%;background:var(--atelier-texture) center/cover;align-items:center;padding-block:100px}
+.preparation-intro>.eyebrow{margin-bottom:25px}
+.preparation-intro>p:not(.eyebrow){font-size:13px;line-height:1.95;max-width:340px;color:var(--muted);margin-top:25px}
+.preparation-card{padding:35px;background:#fcf8f0b8;border:1px solid #d3c0a3;border-radius:9px 60px 9px 9px;box-shadow:0 15px 45px #674c1b0a}
+.preparation-progress{display:flex;align-items:center;justify-content:space-between;font-size:9px;letter-spacing:1.7px;margin-bottom:20px;color:#8c6d43}
+.preparation-check{display:flex;gap:13px;align-items:center;position:relative;cursor:pointer;padding:20px 0;border-bottom:1px solid #bda68755;font-size:13px}
+.preparation-check input{position:absolute;opacity:0;width:24px;height:24px;inset-inline-start:0}
+.check-mark{width:24px;height:24px;flex-shrink:0;display:grid;place-items:center;border:1px solid #a98c64;border-radius:50%;transition:background .25s}
+.preparation-check input:checked+.check-mark{background:#705335;color:#fff4e1}
+.preparation-check input:focus-visible+.check-mark{outline:2px solid #a27944;outline-offset:4px}
+.preparation-actions{display:flex;align-items:flex-start;flex-direction:column;gap:12px;margin-top:25px}
+.preparation-actions .button{font-size:11px;background:#453321;color:#fcf5e9}
+.preparation-actions .text-link{font-size:11px}
+.preparation-status{font-size:10px;line-height:1.7;color:#7d6c56;margin-top:12px}
+.brief-fallback{width:100%;min-height:170px;padding:12px;margin-top:15px;background:#fffaf1;border:1px solid #c7b69a;font:inherit;font-size:13px}
+[dir=rtl] .header-nav>a{font-family:var(--sans);font-size:16px}
+[dir=rtl] .bridal-editorial h1,[dir=rtl] .bridal-editorial h2{font-size:clamp(58px,5.5vw,85px);line-height:1.35;letter-spacing:0}
+[dir=rtl] .bridal-editorial em{font-style:normal}
+[dir=rtl] .bridal-editorial-copy>.eyebrow{letter-spacing:0;font-size:14px}
+[dir=rtl] .bridal-lead{font-size:19px;line-height:1.9}
+[dir=rtl] .bridal-editorial .button{font-size:17px}
+[dir=rtl] .bridal-explore{font-size:15px}
+[dir=rtl] .bridal-detail-print{transform:rotate(8deg)}
+[dir=rtl] .album-heading>p:not(.eyebrow),[dir=rtl] .album-story>p,[dir=rtl] .preparation-intro>p:not(.eyebrow){font-size:18px}
+[dir=rtl] .album-story .text-link,[dir=rtl] .preparation-actions .text-link{font-size:16px}
+[dir=rtl] .preparation-check{font-size:18px}
+[dir=rtl] .preparation-actions .button{font-size:16px}
+[dir=rtl] .preparation-status{font-size:14px}
+[dir=rtl] .preparation-progress{letter-spacing:0;font-size:13px}
+@media(max-width:1200px){.header-nav{gap:15px}.header-nav>a{font-size:17px}.header-brand{min-width:150px}.header-brand>span{font-size:33px}.header-controls{gap:10px}.header-cta{font-size:10px;padding:12px 15px;gap:12px}.bridal-editorial{padding-inline:7%;gap:2%}.bridal-portrait-frame{height:550px}.album-layout{grid-template-columns:200px 1fr;gap:30px}.album-panel{gap:25px}.album-story h3{font-size:32px}}
+@media(max-width:1000px){.header-nav>a{font-size:15px}.header-inner{padding-inline:3%;gap:14px}.header-cta{padding:12px}.bridal-editorial h1,.bridal-editorial h2{font-size:65px}.bridal-portrait-frame{height:490px}.bridal-detail-print{width:130px;inset-inline-start:-15px}.bridal-detail-print img{height:140px}.bridal-editorial-visual{padding-inline-start:40px}.album-layout{grid-template-columns:1fr}.album-choices{flex-direction:row;gap:30px}.album-choices>button{flex:1}.album-panel{grid-template-columns:1fr 1fr}.album-panel figure>img{height:440px}.bridal-preparation{gap:6%}.preparation-card{padding:25px}.interior-story h1{font-size:48px}}
+@media(max-width:900px){.header-inner{height:78px;display:flex;justify-content:space-between;padding-inline:5%}.header-brand{text-align:start;min-width:0}.header-brand>span{font-size:30px}.header-nav{display:none}.header-controls{gap:12px}.header-cta{display:none}.site-header.over-film{margin-bottom:-79px}.nav-toggle{border-radius:50%;width:42px;height:42px}.nav-panel{background:var(--atelier-texture) center/cover}.film-hero{min-height:700px;height:100svh}.film-copy{margin-top:30px}}
+@media(max-width:760px){:root{--atelier-texture:linear-gradient(110deg,#f5eddf77,#faf6eea3),url('/media/texture-mobile.webp')}.film-copy{margin-top:0;bottom:125px}.film-actions{gap:13px}.film-actions .button{font-size:11px;padding:16px 22px}.film-link{font-size:11px;padding:14px 20px}.film-copy h1{font-size:clamp(61px,15.6vw,86px)}.film-hero{min-height:730px}.intro{padding-block:90px}.discovery-image{height:360px;border-radius:90px 10px 10px 10px}.discovery-card:nth-child(3) .discovery-image{border-radius:10px 90px 10px 10px}.compact-discovery .discovery-image{height:125px;border-radius:40px 8px 8px 8px}.compact-discovery .discovery-content{padding-inline:0}.discovery-extras>a{border-radius:8px 30px 8px 30px}.bridal-editorial{grid-template-columns:1fr;padding:55px 7% 70px;gap:30px;min-height:0}.bridal-editorial-copy{padding:0}.bridal-editorial h1,.bridal-editorial h2{font-size:clamp(60px,15vw,82px);line-height:1}.bridal-editorial-copy>.eyebrow{font-size:9px;margin-bottom:24px}.bridal-lead{font-size:13px;margin:22px 0;max-width:320px}.bridal-editorial .button{font-size:11px}.bridal-handwriting{font-size:23px;margin-top:23px}.bridal-editorial-visual{width:90%;max-width:430px;padding-inline-start:30px;justify-self:end;margin-top:8px}.bridal-portrait-frame{height:430px;border-radius:150px 150px 8px 8px;outline-offset:7px}.bridal-detail-print{width:122px;inset-inline-start:-37px;bottom:38px}.bridal-detail-print img{height:137px}.bridal-detail-print figcaption{font-size:15px}.portrait-caption{font-size:7px;letter-spacing:1.2px}.bridal-orbit{width:470px;height:760px;inset-inline-end:-290px;top:120px}.spark-one{top:36px;inset-inline-end:9%;width:30px;height:30px}.spark-two{bottom:35px;inset-inline-start:10%;width:20px;height:20px}.bridal-album{padding-block:65px}.album-heading{display:block;margin-bottom:25px}.album-heading h2,.preparation-intro h2{font-size:48px}.album-heading>p:not(.eyebrow){margin-top:20px;font-size:13px}.album-choices{gap:15px}.album-choices>button{gap:7px;padding:15px 0;min-height:60px;flex-wrap:wrap;align-content:center}.album-choices>button>span:nth-child(2){font-size:22px;white-space:nowrap}.album-choices>button>span:first-child{font-size:8px}.album-choices>button svg{display:none}.album-panel{grid-template-columns:1fr;gap:25px}.album-panel figure>img{height:390px;border-radius:8px 85px 8px 8px}.album-story{padding:0 5px}.album-story>.bridal-spark{margin-bottom:15px;width:23px;height:23px}.album-story h3{font-size:36px}.album-story>p{margin:17px 0}.bridal-preparation{grid-template-columns:1fr;gap:35px;padding-block:65px}.preparation-card{padding:25px;border-radius:8px 45px 8px 8px}.preparation-check{font-size:12px}.interior-editorial{grid-template-columns:1fr;gap:35px}.interior-main-photo{aspect-ratio:1.35;border-radius:65px 8px 8px 8px;height:auto}.interior-story h1{font-size:46px}.interior-details figure img{border-radius:8px 8px 35px 8px}.button{padding:16px 22px;font-size:12px}.gallery-item{border-radius:8px 8px 35px 8px}[dir=rtl] .bridal-editorial h1,[dir=rtl] .bridal-editorial h2{font-size:58px;line-height:1.2}[dir=rtl] .bridal-lead{font-size:18px}[dir=rtl] .bridal-editorial .button{font-size:16px}[dir=rtl] .album-choices>button>span:nth-child(2){font-size:24px}[dir=rtl] .album-choices{gap:12px}[dir=rtl] .album-story h3{font-size:36px}}
+@media(max-width:360px){.header-brand>span{font-size:25px}.header-controls{gap:8px}.header-inner{padding-inline:4%}.bridal-portrait-frame{height:370px}.bridal-editorial h1,.bridal-editorial h2{font-size:57px}.album-choices>button>span:nth-child(2){font-size:20px}.film-actions .button{padding-inline:16px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.bridal-editorial-visual:hover .bridal-portrait-frame>img,.interior-main-photo:hover img{transform:none}}
+
+/* One continuous mineral canvas; section washes always return to clear edges. */
+html{background:#f4eddf}
+body{position:relative;isolation:isolate;background:transparent}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#f6efdf45,#f6efdf45),url('/media/texture.webp') center/cover no-repeat}
+main{background:transparent}
+.intro,.discovery,.bridal-editorial,.bridal-album,.bridal-preparation,.real-interior,.contact,.faq,.gallery,.price-menu{background-image:none;background-color:transparent;max-width:none}
+.intro{background:linear-gradient(180deg,#f7f1e273,transparent 32%,#ead8b324 70%,transparent)}
+.discovery{background:linear-gradient(180deg,transparent,#d9c19a42 25%,#d9c19a42 70%,transparent)}
+.bridal-editorial{background:linear-gradient(180deg,transparent,#dfc3af35 22%,#eed5c049 76%,transparent)}
+.bridal-album{background:linear-gradient(180deg,transparent,#fffdf5bd 19%,#fffdf5bd 79%,transparent)}
+.bridal-preparation{background:linear-gradient(180deg,transparent,#d2b89140 23%,#d2b89140 74%,transparent)}
+.gallery{background:linear-gradient(180deg,transparent,#f9f5ece0 20%,#f9f5ece0 75%,transparent)}
+.real-interior{background:linear-gradient(180deg,transparent,#b0a18a35 25%,#b0a18a35 75%,transparent)}
+.contact{background:linear-gradient(180deg,transparent,#e1cfb344 28%,#e1cfb344 72%,transparent)}
+.contact>p:not(.eyebrow){max-width:640px}
+.faq{margin:0;width:100%;padding-inline:max(8.2%,calc((100% - 920px)/2));background:linear-gradient(180deg,transparent,#fff9ee80 25%,#fff9ee80 75%,transparent)}
+.price-menu{background:linear-gradient(180deg,transparent,#fffaf0bd 12%,#fffaf0bd 85%,transparent)}
+.discovery-extras>a{background:#f9f1e58a;backdrop-filter:blur(2px)}
+.preparation-card{background:linear-gradient(135deg,#fffbf2dd,#f2e6d3b3)}
+footer{position:relative;background:linear-gradient(180deg,transparent 0,#4a3828d9 105px,#342719ed 230px);padding-top:80px}
+.footer-invite{padding-top:65px}
+.album-panel img[src*="bridal-makeup-stock"]{object-position:50% 64%}
+.album-panel img[src*="bridal-details-stock"]{object-position:50% 38%}
+.album-panel figure>figcaption{font-size:8px;line-height:1.7;letter-spacing:1px}
+.interior-main-photo{aspect-ratio:1.6;max-height:none}
+.interior-details figure:first-child img{object-position:center}
+.header-nav{gap:20px}
+.header-nav>a{font-size:17px}
+.header-inner{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+.header-brand{min-width:155px}
+.header-brand>span{font-size:36px}
+.header-controls{min-width:0}
+[dir=rtl] .header-nav>a{font-size:15px}
+.film-hero::after{content:'';position:absolute;inset-inline:0;bottom:0;height:35px;background:linear-gradient(transparent,#f4eddf55);pointer-events:none}
+@media(min-width:901px) and (max-width:1150px){.header-inner{grid-template-columns:1.3fr auto 1fr;gap:13px;padding-inline:2%}.header-nav{gap:12px}.header-nav>a{font-size:15px}.header-brand{min-width:125px}.header-brand>span{font-size:29px}.header-controls{gap:8px}.header-cta{font-size:9px;gap:7px;padding:12px}.header-controls .language-switch>a{padding-inline:5px;min-width:28px}.header-controls .language-switch>a[lang=ar]{min-width:42px}[dir=rtl] .header-nav>a{font-size:13px}[dir=rtl] .header-cta{font-size:13px}}
+@media(max-width:900px){.header-inner{display:flex}.header-brand{text-align:start;min-width:0}.header-brand>span{font-size:30px}}
+@media(max-width:760px){body::before{background-image:linear-gradient(#f6efdf55,#f6efdf55),url('/media/texture-mobile.webp')}.faq{padding-inline:7%}.interior-main-photo{aspect-ratio:1.45}.album-panel figure>figcaption{font-size:8px}.header-brand>span{font-size:27px}footer{padding-top:60px;background:linear-gradient(180deg,transparent,#4a3828df 80px,#342719ed 180px)}.footer-invite{padding-top:65px}}
+@media(max-width:360px){.header-brand>span{font-size:24px}}
+
+.real-interior{color:#fcf4e5;background:linear-gradient(180deg,transparent,#4f5142e8 100px,#4f5142e8 calc(100% - 100px),transparent);padding-block:135px}
+.real-interior .eyebrow,.real-interior .interior-story>p:not(.eyebrow),.real-interior .interior-visit>p:not(.eyebrow),.real-interior .opening-hours,.real-interior .opening-hours .eyebrow,.real-interior .interior-details figcaption span{color:#e7ddc9}
+.real-interior .text-link{color:#fff5e1;border-color:#d2c09b99}
+.real-interior .opening-hours>div,.real-interior .opening-hours dl>div,.real-interior .interior-details{border-color:#ddd0b555}
+.real-interior .interior-main-photo>span{color:#4a3927}
+.real-interior .interior-main-photo{box-shadow:0 25px 50px #1d201c40}
+.real-interior .interior-details{margin-top:50px}
+.discovery{background:linear-gradient(180deg,transparent,#cfaf7655 25%,#cfaf7655 72%,transparent)}
+.bridal-preparation{background:linear-gradient(180deg,transparent,#caa59848 23%,#caa59848 74%,transparent)}
+@media(max-width:760px){.real-interior{padding-block:115px}.real-interior .interior-story h1{font-size:44px}}
+/* Service cards retain useful detail on both the homepage and the full menu. */
+.compact-discovery .discovery-content{display:block;padding:23px 4px 0}
+.compact-discovery .discovery-content>.eyebrow,.compact-discovery .discovery-content>p,.compact-discovery .discovery-link{display:flex}
+.compact-discovery .discovery-content>p:not(.eyebrow){display:block}
+.discovery-content>p:not(.eyebrow){font-size:14px;line-height:1.8;max-width:34ch;color:#655644;min-height:76px}
+.discovery-content h3{margin-block:10px;font-size:clamp(28px,2.4vw,38px)}
+.discovery-card{border-bottom:1px solid #ac96745c;padding-bottom:24px}
+.discovery-card:focus-visible{outline:2px solid #735536;outline-offset:8px;border-radius:8px}
+.discovery-card:hover .discovery-link{color:#382716}
+.discovery-image{overflow:hidden}
+.discovery-image img{transition:transform .65s cubic-bezier(.2,.65,.3,1)}
+.discovery-card:hover .discovery-image img{transform:scale(1.035)}
+.price-group{padding:30px clamp(20px,3vw,42px);background:#fffbf0b8;border:1px solid #b6a18466;border-radius:8px 48px 8px 8px;box-shadow:0 12px 35px #62492f06}
+.price-group h3{font-size:36px}
+.price-row{transition:background .2s}
+.price-row:hover{background:#cdb08814}
+.price-filters{gap:9px;flex-wrap:wrap}
+.price-filters button{min-height:44px}
+.price-filters button[aria-pressed=true]{box-shadow:0 4px 14px #3d2b2822}
+.products{background:linear-gradient(180deg,transparent,#eedfd9a8 18%,#eedfd9a8 82%,transparent)}
+.products .section-heading{align-items:end}
+.products-intro{max-width:420px;font-size:15px;line-height:1.9;color:#695645}
+.product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin-top:55px}
+.product-stage{height:350px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 45% 30%,#fff8eb,#c6b291);border-radius:120px 120px 8px 8px;margin-bottom:24px}
+.product-stage-2{background:radial-gradient(ellipse at 45% 30%,#fff5f0,#c5aaa0);border-radius:8px 8px 120px 8px}
+.product-stage-3{background:radial-gradient(ellipse at 45% 30%,#f5f2e4,#acb09c);border-radius:8px 120px 8px 8px}
+.product-shape{width:115px;height:185px;border-radius:10px 10px 20px 20px;background:linear-gradient(90deg,#d6c7b1,#fffaf0 45%,#c7b391);box-shadow:15px 20px 24px #6c523631;position:relative;display:grid;place-items:center;transform:rotate(-8deg)}
+.product-shape:before{content:'';position:absolute;top:-28px;left:28px;right:28px;height:28px;background:linear-gradient(90deg,#493c2d,#71624d,#3f3426);border-radius:5px 5px 0 0}
+.product-stage-2 .product-shape{height:90px;width:150px;border-radius:12px 12px 30px 30px;transform:rotate(6deg)}
+.product-stage-2 .product-shape:before{left:0;right:0;height:22px;top:-18px}
+.product-stage-3 .product-shape{width:85px;height:205px;transform:rotate(-5deg)}
+.product-shape span{font-family:var(--serif);font-size:18px;color:#665036}
+.product-index{position:absolute;bottom:18px;inset-inline-start:20px;color:#705b43;font-size:13px}
+.product-placeholder h2{font-size:28px;line-height:1.25;margin:10px 0}
+.product-placeholder>p:last-child{font-size:13px;line-height:1.8;color:#705f4b;max-width:32ch}
+.product-enquiry{max-width:650px;padding-top:80px;margin:auto;text-align:center}
+.product-enquiry h2{font-size:42px}
+.product-enquiry p{font-size:15px;line-height:1.9;margin:22px 0 30px}
+.products-teaser .section-heading{margin-bottom:28px}
+.header-nav{gap:16px}.header-nav>a{font-size:15px}
+[dir=rtl] .header-nav>a{font-size:14px}
+[dir=rtl] .discovery-content>p:not(.eyebrow){font-size:18px;line-height:1.85}
+[dir=rtl] .products-intro,[dir=rtl] .product-enquiry p,[dir=rtl] .product-placeholder>p:last-child{font-size:18px}
+.footer-bottom>span:last-child{font-size:10px;line-height:1.8}
+@media(min-width:901px) and (max-width:1150px){.header-nav{gap:9px}.header-nav>a{font-size:13px}.header-brand>span{font-size:26px}.header-inner{grid-template-columns:1.5fr auto 1fr}.header-brand{min-width:110px}[dir=rtl] .header-nav>a{font-size:12px}}
+@media(max-width:760px){.product-grid{grid-template-columns:1fr;gap:40px}.product-stage{height:300px}.products .section-heading{display:block}.products-intro{margin-top:25px}.product-enquiry{padding-top:55px}.product-enquiry h2{font-size:35px}.price-group{padding:23px 18px}.price-group h3{font-size:30px}.discovery-content>p:not(.eyebrow){min-height:0}.compact-discovery .discovery-grid{display:grid;grid-template-columns:1fr;gap:35px}.compact-discovery .discovery-image{height:300px}.compact-discovery .discovery-content h3{font-size:30px}}
+@media(prefers-reduced-motion:reduce){.discovery-image img,.price-row{transition:none}}
+.compact-discovery .discovery-image{height:280px}
+.discovery-content>.eyebrow{gap:6px}
+.discovery-image .round-arrow{top:20px;bottom:auto;inset-inline-end:20px}
+.discovery{background:linear-gradient(180deg,transparent,#f2e3cbbd 20%,#f2e3cbbd 80%,transparent)}
+@media(max-width:760px){.compact-discovery .discovery-image{height:300px}}
+@media(max-width:480px){.discovery-extras{min-width:0}.discovery-extras>a{min-width:0;display:grid;grid-template-columns:24px minmax(0,1fr) 22px;gap:8px 10px;padding:22px 18px}.discovery-extras>a>div{min-width:0;grid-column:2}.discovery-extras .extra-index{grid-row:1 / 3;grid-column:1}.discovery-extras .extra-price{grid-column:2;grid-row:2;white-space:normal}.discovery-extras>a>svg{grid-column:3;grid-row:1 / 3}.discovery-extras h3{font-size:25px}}

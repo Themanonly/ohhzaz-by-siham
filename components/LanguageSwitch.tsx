@@ -1,0 +1,11 @@
+'use client';
+import Link from 'next/link';
+import {useRouter} from 'next/navigation';
+import {useLayoutEffect} from 'react';
+export default function LanguageSwitch({locale,page}:{locale:'fr'|'ar';page:string}){const router=useRouter();useLayoutEffect(()=>{const raw=sessionStorage.getItem('ohhzaz-language-position');if(!raw)return;const saved=JSON.parse(raw);if(saved.locale!==locale)return;let cancelled=false;const restore=()=>{if(cancelled)return;const element=document.querySelector<HTMLElement>(`[data-scroll-key="${saved.key}"]`);const top=element?element.getBoundingClientRect().top+window.scrollY+saved.ratio*element.offsetHeight-110:saved.y;window.scrollTo({top:Math.max(0,top),behavior:'instant'})};restore();requestAnimationFrame(()=>requestAnimationFrame(restore));document.fonts.ready.then(restore);const observer=new ResizeObserver(restore);observer.observe(document.body);const stop=()=>{cancelled=true;observer.disconnect()};const timer=window.setTimeout(()=>{stop();sessionStorage.removeItem('ohhzaz-language-position')},1800);window.addEventListener('wheel',stop,{passive:true});window.addEventListener('touchstart',stop,{passive:true});return()=>{stop();clearTimeout(timer);window.removeEventListener('wheel',stop);window.removeEventListener('touchstart',stop)}},[locale]);return <nav className="language-switch" aria-label="Langue / اللغة">{(['fr','ar'] as const).map(l=><Link key={l} href={`/${l}${page?'/'+page:''}`} lang={l} hrefLang={l} scroll={false} aria-label={l==='fr'?'Français':'العربية'} aria-current={locale===l?'true':undefined} onClick={e=>{if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();if(l===locale)return;const sections=Array.from(document.querySelectorAll<HTMLElement>('[data-scroll-key]'));const section=sections.filter(el=>el.getBoundingClientRect().top<=130).at(-1)||sections[0];const ratio=section?(110-section.getBoundingClientRect().top)/section.offsetHeight:0;sessionStorage.setItem('ohhzaz-language-position',JSON.stringify({locale:l,key:section?.dataset.scrollKey,ratio,y:window.scrollY}));router.push(`/${l}${page?'/'+page:''}${location.search}${location.hash}`,{scroll:false})}}>{l==='fr'?'FR':'العربية'}</Link>)}</nav>}
+
+
+
+
+
+

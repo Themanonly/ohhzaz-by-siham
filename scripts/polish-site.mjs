@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import sharp from 'sharp';
+await sharp('C:/Users/naouf/Downloads/ohh_zaz_1703590747_3266278382856800649_44080976396.jpg').resize({width:2400}).webp({quality:90}).toFile('public/media/hero-upscaled-2400.webp');
+const p='components/Salon.tsx';let s=fs.readFileSync(p,'utf8');
+s=s.replace("import Link from 'next/link';","import Link from 'next/link';\nimport Header from './Header';\nimport BridalPortrait from './BridalPortrait';\nimport Gallery from './Gallery';");
+const start=s.indexOf('<header className="header">'),end=s.indexOf('\n<main id="main">',start);if(start<0||end<0)throw Error('Header boundaries not found');s=s.slice(0,start)+'<Header locale={locale} page={page}/>'+s.slice(end);
+s=s.replace(/<img src="\/media\/hero-upscaled-1000.webp"[^>]*\/>/,'<BridalPortrait locale={locale} hero/>');
+s=s.replace("{image('bridal',ar?'تسريحة ومكياج مناسبة':'Coiffure et maquillage de cérémonie')}",'<BridalPortrait locale={locale}/>');
+const gstart=s.indexOf('<div className="gallery-grid">'),gend=s.indexOf('</section>}',gstart);if(gstart<0||gend<0)throw Error('Gallery boundaries not found');s=s.slice(0,gstart)+'<Gallery locale={locale}/>'+s.slice(gend);
+s=s.replace("const [menu,setMenu]=useState(false);",'');
+s=s.replace("useEffect(()=>{if(!menu)return;const close=(e:KeyboardEvent)=>{if(e.key==='Escape')setMenu(false)};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close)},[menu]);",'');
+s=s.replace('ArrowRight, Menu, X, Camera','ArrowRight, Camera');
+s=s.replace('<main id="main">','<main id="main" tabIndex={-1}>');
+s=s.replace('<span className="section-index">01 / BEAUTÉ</span>',`{page?<Link className="button" href="#tarifs">{ar?'الخدمات والأسعار':'Consulter les tarifs'}<ArrowRight size={16}/></Link>:<span className="section-index">01 / {ar?'الجمال':'BEAUTÉ'}</span>}`);
+s=s.replace('<OpeningHours locale={locale}/></section>}',`<a className="text-link directions-link" href="https://www.google.com/maps/search/?api=1&query=33.5961518%2C-7.6411606" target="_blank" rel="noopener noreferrer">{ar?'الاتجاهات إلى الصالون':'Itinéraire vers le salon'}<ArrowUpRight size={16}/></a><OpeningHours locale={locale}/></section>}`);
+s=s.replace('<div className="footer-bottom">',`<nav className="footer-links" aria-label={ar?'روابط أسفل الصفحة':'Navigation du pied de page'}>{[[t.home,''],[t.nav[0],'mariee'],[ar?'الخدمات والأسعار':'Prestations & tarifs','prestations'],[t.nav[2],'le-salon'],[t.book,'contact']].map(([label,path])=><Link key={label} href={url(path)}>{label}</Link>)}</nav><div className="footer-bottom">`);
+fs.writeFileSync(p,s);

@@ -1,0 +1,57 @@
+export type Service={fr:string;ar:string;price:number;from?:boolean;alternative?:number;minutes?:number};
+export type Category={id:string;fr:string;ar:string;items:Service[]};
+// Transcribed from the owner-supplied PRICES.jpeg, 20 September 2026.
+export const categories:Category[]=[
+{id:'coiffure',fr:'Coiffure',ar:'الشعر',items:[
+{fr:'Brushing',ar:'تصفيف بالسشوار',price:90,from:true},
+{fr:'Babyliss',ar:'تجعيد الشعر بالبابيليس',price:180,from:true},
+{fr:'Pose teinture',ar:'تطبيق الصبغة',price:180},
+{fr:'Teinture sans ammoniaque',ar:'صبغة بدون أمونيا',price:400},
+{fr:'Teinture demi-tête',ar:'صبغة نصف الرأس',price:270},
+{fr:'Couronne',ar:'صبغة منطقة التاج',price:180},
+{fr:'Coupe enfants',ar:'قصّ شعر الأطفال',price:150},
+{fr:'Coupe + brushing',ar:'قصّ الشعر مع السشوار',price:280},
+{fr:'Rafraîchissement de coupe',ar:'تجديد القصّة',price:200},
+{fr:'Pointes',ar:'قصّ الأطراف',price:150},
+{fr:'Flash',ar:'فلاش',price:800,from:true},
+{fr:'Balayage',ar:'بالياج',price:1000,from:true}]},
+{id:'onglerie',fr:'Onglerie',ar:'الأظافر',items:[
+{fr:'Manucure',ar:'مانيكير',price:100},
+{fr:'Pédicure',ar:'باديكير',price:180},
+{fr:'Pose vernis mains',ar:'طلاء أظافر اليدين',price:60},
+{fr:'Pose vernis pieds',ar:'طلاء أظافر القدمين',price:70},
+{fr:'Pose french',ar:'طلاء فرنش',price:70},
+{fr:'Manucure semi-permanente',ar:'مانيكير شبه دائم',price:230},
+{fr:'Pédicure permanente',ar:'باديكير دائم',price:300},
+{fr:'Pose gel',ar:'تركيب الجل',price:400},
+{fr:'Pose vernis semi-permanent',ar:'طلاء شبه دائم',price:150}]},
+{id:'maquillage',fr:'Maquillage & cils',ar:'المكياج والرموش',items:[
+{fr:'Pose faux cils',ar:'تركيب رموش اصطناعية',price:150},
+{fr:'Extension cils permanente',ar:'تمديد رموش دائم',price:450,from:true},
+{fr:'Maquillage yeux',ar:'مكياج العيون',price:250},
+{fr:'Maquillage du jour',ar:'مكياج نهاري',price:350},
+{fr:'Maquillage du soir',ar:'مكياج السهرة',price:450,from:true}]},
+{id:'epilation',fr:'Épilation',ar:'إزالة الشعر',items:[
+{fr:'Sourcils',ar:'الحواجب',price:50},
+{fr:'Forme sourcils',ar:'تحديد شكل الحواجب',price:70},
+{fr:'Duvet',ar:'الزغب',price:40},
+{fr:'Duvet au fil',ar:'إزالة الزغب بالخيط',price:50},
+{fr:'Aisselles',ar:'الإبطان',price:60},
+{fr:'Demi-bras',ar:'نصف الذراعين',price:60},
+{fr:'Bras complets',ar:'الذراعان بالكامل',price:100},
+{fr:'Demi-jambes',ar:'نصف الساقين',price:70},
+{fr:'Jambes complètes',ar:'الساقان بالكامل',price:140},
+{fr:'Bord de maillot',ar:'خط البيكيني',price:80},
+{fr:'Maillot intégral',ar:'بيكيني كامل',price:140},
+{fr:'Dos',ar:'الظهر',price:50},
+{fr:'Ventre',ar:'البطن',price:50},
+{fr:'Fil visage',ar:'إزالة شعر الوجه بالخيط',price:150}]},
+{id:'soins',fr:'Massages & soins',ar:'التدليك والعناية',items:[
+{fr:'Massage relaxant',ar:'تدليك للاسترخاء',price:250,minutes:60},
+{fr:'Massage du dos',ar:'تدليك الظهر',price:150,minutes:30},
+{fr:'Massage des pieds',ar:'تدليك القدمين',price:100},
+{fr:'Soin des yeux',ar:'عناية بالعينين',price:100},
+{fr:'Soin visage',ar:'عناية بالوجه',price:450,alternative:550},
+{fr:'Demi-soin express',ar:'نصف جلسة عناية سريعة',price:250},
+{fr:'Modelage visage',ar:'تدليك الوجه',price:150},
+{fr:'Soins lissants',ar:'علاجات تنعيم الشعر',price:2000,from:true}]}];
