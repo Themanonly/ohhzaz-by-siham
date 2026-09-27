@@ -15,9 +15,9 @@ Checks: `node scripts/check-content.mjs`, `npm run check`, `node scripts/check-p
 - Instagram, TikTok and WhatsApp; multiple accounts open a chooser. Source credits are in docs/ASSET-CREDITS.md.
 
 ## Admin
-/admin is implemented for Supabase Auth, database and storage. Without configuration it shows setup information. No backend or staff accounts have been provisioned or tested against a live service.
+/admin uses server-side PostgreSQL on Railway, with verified TLS and HttpOnly session cookies. The database schema and initial content are provisioned. Account activation and deployment status are recorded in docs/RAILWAY-HANDOFF.md.
 Full admin manages products, categories, services and contact accounts. Manager manages products, categories and services. This is a content administration panel, not a visual page/layout editor.
-Read docs/ADMIN-SETUP.md before enabling it. Never expose a service-role key.
+Read docs/ADMIN-SETUP.md before enabling it. DATABASE_URL is a server-only secret; never expose it through NEXT_PUBLIC variables.
 
 ## Deployment
 Deployment is assigned to the user’s VS Code agent. Follow docs/VS-CODE-DEPLOYMENT-PROMPT.md.

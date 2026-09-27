@@ -1,6 +1,6 @@
 # VS Code deployment prompt — OHH ZAZ by SIHAM
 
-You are the deployment agent. The coding agent has prepared the changes locally but has NOT committed, pushed, deployed, purchased a domain, connected Supabase, or verified Search Console. Work only in:
+You are the deployment agent. The coding agent has prepared the changes locally but has NOT committed, pushed, deployed, purchased a domain or verified Search Console. Work only in:
 C:\Users\naouf\OneDrive\Desktop\WEBSITES\OHHZAZ BY SIHAM
 Preserve all current changes. Inspect git status/diff before proceeding; do not reset or overwrite them. Repository: https://github.com/Themanonly/ohhzaz-by-siham.git . Current public site: https://ohhzaz-by-siham.netlify.app/fr . Deployment is now your task; do not redesign the approved website.
 
@@ -8,7 +8,7 @@ Preserve all current changes. Inspect git status/diff before proceeding; do not 
 
 2. Connect the existing GitHub/Netlify project, review the exact diff, then commit/push and deploy the reviewed changes using the authenticated account. Keep original copyright/proprietary license and third-party credits. Do not create another repository/site unnecessarily. Keep Next.js/OpenNext support and .next publishing; do not add SPA rewrites or static export. Report the commit and deployment URL.
 
-3. Backend is NOT provisioned. To activate /admin, follow docs/ADMIN-SETUP.md in an owner-controlled Supabase project; review/apply supabase/schema.sql, disable public signup, invite owner-approved admin/manager accounts and assign the two roles. The user must handle credentials. Set only NEXT_PUBLIC_SUPABASE_URL and the public anon key; never expose service-role credentials. Verify actual persistence and direct-API RLS denials for anonymous/nonstaff/manager, storage uploads and admin-only contact editing before calling admin ready. If backend access is unavailable, deploy the public placeholder catalogue without backend variables and report admin pending. Never simulate successful saves.
+3. Railway PostgreSQL is provisioned and seeded, and Netlify has a production-only DATABASE_URL secret. Read docs/RAILWAY-HANDOFF.md and docs/ADMIN-SETUP.md first. Complete the documented private credential rotation and restricted runtime-role setup before production staff access. Preserve the server-side TLS certificate bundle. Run node --env-file=.env.local scripts/check-database.mjs locally, then deploy and verify hosted authentication, permissions and product persistence. The owner privately chooses account passwords; the Manager email is not supplied yet. Do not create a Supabase project or another Railway website service. Never expose DATABASE_URL in NEXT_PUBLIC variables or logs.
 
 4. Hosted verification: all six pages in /fr and /ar return 200 with correct lang/direction/canonical/hreflang; unknown pages return 404; /admin is noindex; production sitemap contains 12 canonical localized URLs, previews are noindex. Check Google verification file returns 200 with its exact content, JSON-LD parses, social cards/favicon resolve, both films support byte-range requests, and service photos load. Make a short physical/mobile check of full-width homepage video, bridal playback, category links and exact WhatsApp message. No real messages/orders should be sent for tests. The owner will do broader manual review.
 

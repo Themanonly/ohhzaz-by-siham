@@ -1,20 +1,27 @@
-# Admin connection and verification
+# Railway administration setup
 
-Status: implemented, NOT connected to a persistent backend and NOT verified with real authenticated roles.
+The website stays on Netlify; PostgreSQL stays in the existing OHH ZAZ by SIHAM Railway project. Do not provision another website service or Supabase project.
 
-1. In an owner-controlled Supabase project, review and apply supabase/schema.sql once to a new database. The schema is not an idempotent migration; do not run over an existing installation blindly.
-2. Disable public signup. Invite the two staff users through Supabase Auth; the user completes their password setup. Assign their exact Auth UUIDs in staff_roles through the trusted SQL dashboard, with admin or manager. Never expose role assignment to the browser.
-3. Configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Netlify and locally as needed. These are public client identifiers; permissions depend on RLS. Never use the service-role key in client code or NEXT_PUBLIC variables.
-4. Rebuild after environment changes. /admin uses in-memory sessions; reload requires login again. No password or token is persisted in browser storage by this application. Expired sessions require login again.
-5. Test on a nonproduction backend before enabling production editing. Check anonymous cannot write any table or upload; cannot read draft products or staff roles. Ordinary authenticated nonstaff users must have the same write denials.
-6. Check manager can create/edit a product, upload JPG/PNG/WebP under 5MB, create/edit a category and save service prices. Manager must be denied contact updates and role assignment through DIRECT API requests, not merely hidden controls.
-7. Check admin can edit contact accounts, then add two accounts for each platform and verify public chooser identities and exact WhatsApp message forwarding. Restore the intended real accounts afterward.
-8. Publish a test product, reload a fresh public session and verify persistence, search/filter/detail/price. Unpublish and ensure anonymous API and public UI no longer expose it. Remove test data through normal owner-approved tools.
-9. Service groups use the five established IDs and default to the owner price sheet until saved. New tariff entries use their category image. Product descriptions and Arabic translations are optional in the editor; supply good Arabic translations before launch.
-10. Storage is a public catalogue bucket containing only public product photography. Uploads use random immutable paths; no UI overwrite/delete policy. Clean orphan files only through trusted administration after checking references.
+## Connection and migration
+DATABASE_URL is server-only, saved as a Netlify production secret. Previews do not receive it. Local .env.local is ignored by Git.
+lib/database-options.mjs enforces TLS and verifies the certificate with db/certs/railway-root.crt and postgres.railway.internal. This is a PUBLIC CA certificate, not a private key. Never disable certificate verification to work around renewal errors. next.config.ts traces this certificate into the server bundle.
+db/schema.sql is active; supabase/schema.sql is historical and must not be applied.
+Migration command: node --env-file=.env.local scripts/migrate.mjs. The schema and seed data are already present: four categories, five service groups, three contacts.
 
-The public catalogue validates response shape and safe image/contact URLs. Backend outages show labelled catalogue previews and suppress contact links rather than display potentially obsolete configured numbers. Monitor this condition operationally.
+## Private staff setup
+Owner: sihamhallaoui1@gmail.com. Manager email is still required.
+The owner runs this from the project PowerShell terminal:
+```powershell
+.\scripts\setup-staff.ps1 -Email 'sihamhallaoui1@gmail.com' -Role admin
+```
+It requests a masked password of at least 14 characters and never overwrites an existing account. Do not send passwords through chat or put them in command arguments. Repeat with the approved separate manager email and -Role manager.
 
-Not included: payment, stock reservation, orders, customer accounts, arbitrary page editing, staff invitation UI, or guaranteed booking availability. Do not advertise those capabilities.
+Sessions use hashed random tokens and HttpOnly/Secure/SameSite cookies lasting eight hours. Manager can edit products, categories and service prices. Admin also edits contact links. There is no public signup, role-assignment API, or arbitrary visual page editor.
+Uploads are public product photographs, not private documents.
 
-References: https://supabase.com/docs/guides/database/postgres/row-level-security and https://supabase.com/docs/guides/storage/security/access-control
+## Checks and deployment
+Run npm run check and node --env-file=.env.local scripts/check-database.mjs.
+The database check starts a production server on port 3031, creates temporary test identities/category, checks TLS, authentication, CSRF, secure cookies, role enforcement, persistence and logout, then removes its own test records. Global login throttling counts these test requests.
+VS Code must deploy the current source and verify real hosted login, upload, publication and persistence. Local success does not prove that Netlify is running this code.
+See RAILWAY-HANDOFF.md for outstanding security and account steps.
+Payments, orders, stock reservation and automatic appointment confirmation are not implemented.

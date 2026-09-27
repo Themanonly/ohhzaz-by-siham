@@ -7,7 +7,7 @@ const localized=(v:unknown)=>record(v)&&text(v.fr)&&text(v.ar);
 export const serviceImages=new Set(['brushing','coupe','couleur','soin-cheveux','chignon','ongles','pedicure','maquillage','cils','sourcils','teinture-sourcils','epilation','visage']);
 export function validProduct(v:unknown):v is Product{
  if(!record(v)||!text(v.id)||!text(v.category_id)||!localized(v.name)||v.status!=='published'||typeof v.price!=='number'||!Number.isFinite(v.price)||v.price<0||!text(v.image))return false;
- try{const u=new URL(v.image);if(u.protocol!=='https:'||u.username||u.password)return false;}catch{return false;}
+ try{if(/^\/api\/media\/[0-9a-f-]{36}$/.test(v.image))return v.description==null||(record(v.description)&&typeof v.description.fr==='string'&&typeof v.description.ar==='string');const u=new URL(v.image);if(u.protocol!=='https:'||u.username||u.password)return false;}catch{return false;}
  return v.description==null||(record(v.description)&&typeof v.description.fr==='string'&&typeof v.description.ar==='string');
 }
 export const validCategory=(v:unknown):v is ProductCategory=>record(v)&&text(v.id)&&localized(v.name);

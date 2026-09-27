@@ -1,0 +1,3 @@
+import {database,databaseReady} from '../../../../lib/db';
+export const runtime='nodejs';
+export async function GET(_req:Request,{params}:{params:Promise<{id:string}>}){const {id}=await params;if(!databaseReady()||!/^[0-9a-f-]{36}$/.test(id))return new Response(null,{status:404});try{const row=(await database().query('SELECT bytes,content_type FROM salon_media WHERE id=$1',[id])).rows[0];if(!row)return new Response(null,{status:404});return new Response(new Uint8Array(row.bytes),{headers:{'Content-Type':row.content_type,'Cache-Control':'public,max-age=31536000,immutable','X-Content-Type-Options':'nosniff'}});}catch{return new Response(null,{status:503});}}

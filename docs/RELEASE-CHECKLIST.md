@@ -6,13 +6,13 @@
 - Bridal date/time/service/inspiration message builder with matching clipboard/WhatsApp content.
 - Search/filter/sort/product detail catalogue; placeholders until real inventory is supplied.
 - TikTok, Instagram, WhatsApp and multi-account chooser support.
-- Supabase-backed admin code and two-role RLS schema prepared; NOT connected or live-auth tested.
+- Railway-backed admin API and database verified locally with both roles. See RAILWAY-HANDOFF.md; hosted activation is pending.
 - Localized metadata, structured data, 12-route sitemap, preview/production indexing, Google verification asset.
 - Proprietary project notice, source credits, deployment and database setup documentation.
 
 ## Still external or awaiting owner content
 - VS Code agent deploys, verifies hosted behavior and configures Search Console.
-- Supabase provisioning and real authorization/persistence tests before admin use.
+- Private credential rotation, restricted runtime role, owner/manager account setup, and hosted verification before admin use.
 - Correct OOH to OHH in supplied social-sharing raster master.
 - Owner final manual review, including Arabic wording, media permissions, legal entity information and business details.
 - Purchase/connect ohhzaz.com later; keep current origin until HTTPS and DNS are ready.
