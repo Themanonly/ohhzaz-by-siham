@@ -15,8 +15,8 @@ export const copy = {
     "footerCta": "Contacter le salon",
     "address": "Casablanca, Maroc",
     "contactTitle": "Préparons votre visite.",
-    "contactBody": "Indiquez au salon la prestation souhaitée et votre date. Siham vous répond sur Instagram pour préciser votre demande et confirmer les disponibilités.",
-    "contactCta": "Contacter sur Instagram",
+    "contactBody": "Indiquez au salon la prestation souhaitée et votre date. Siham vous répond sur WhatsApp ou Instagram pour préciser votre demande et confirmer les disponibilités.",
+    "contactCta": "Contacter sur WhatsApp ou Instagram",
     "faq": "VOS QUESTIONS PRATIQUES",
     "questions": [
       "Où consulter les prix ?",
@@ -26,7 +26,7 @@ export const copy = {
     "answers": [
       "La page Prestations & tarifs présente la carte du salon en dirhams. Pour les prix « à partir de » et les options, demandez le montant correspondant à votre prestation avant le rendez-vous.",
       "Précisez votre date, l’heure à laquelle vous devez être prête et les prestations souhaitées. Joignez vos inspirations, votre tenue et vos accessoires pour faciliter l’échange.",
-      "Envoyez votre demande au salon sur Instagram. Le rendez-vous est confirmé uniquement après accord direct avec le salon ; ce site ne réserve pas de créneau."
+      "Envoyez votre demande au salon sur WhatsApp ou Instagram. Le rendez-vous est confirmé uniquement après accord direct avec le salon ; ce site ne réserve pas de créneau."
     ],
     "home": "Accueil"
   },
@@ -46,8 +46,8 @@ export const copy = {
     "footerCta": "تواصلي مع الصالون",
     "address": "الدار البيضاء، المغرب",
     "contactTitle": "لنحضّر زيارتكِ.",
-    "contactBody": "اذكري للصالون الخدمة المطلوبة والتاريخ المقترح. تجيبكِ سهام عبر إنستغرام لتوضيح طلبكِ والتأكد من المواعيد المتاحة.",
-    "contactCta": "تواصلي عبر إنستغرام",
+    "contactBody": "اذكري للصالون الخدمة المطلوبة والتاريخ المقترح. تجيبكِ سهام عبر واتساب أو إنستغرام لتوضيح طلبكِ والتأكد من المواعيد المتاحة.",
+    "contactCta": "تواصلي عبر واتساب أو إنستغرام",
     "faq": "أسئلة عملية",
     "questions": [
       "أين أجد الأسعار؟",
@@ -57,7 +57,7 @@ export const copy = {
     "answers": [
       "تجدين قائمة الصالون بالدرهم في صفحة الخدمات والأسعار. للأسعار الابتدائية والخيارات، اسألي عن المبلغ المناسب لخدمتكِ قبل الموعد.",
       "حدّدي التاريخ والوقت الذي تحتاجين فيه إلى إكمال إطلالتكِ والخدمات المطلوبة. أرفقي صور الإلهام والملابس والإكسسوارات لتسهيل الحديث.",
-      "أرسلي طلبكِ للصالون عبر إنستغرام. لا يتأكد الموعد إلا باتفاق مباشر مع الصالون؛ هذا الموقع لا يحجز مواعيد تلقائياً."
+      "أرسلي طلبكِ للصالون عبر واتساب أو إنستغرام. لا يتأكد الموعد إلا باتفاق مباشر مع الصالون؛ هذا الموقع لا يحجز مواعيد تلقائياً."
     ],
     "home": "الرئيسية"
   }

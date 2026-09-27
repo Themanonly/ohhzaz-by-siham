@@ -5,6 +5,11 @@
 [build.environment]
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
+  SITE_URL = "https://ohhzaz-by-siham.netlify.app"
+  SITE_INDEXABLE = "false"
+
+[context.production.environment]
+  SITE_INDEXABLE = "true"
 
 [context.deploy-preview.environment]
   SITE_INDEXABLE = "false"

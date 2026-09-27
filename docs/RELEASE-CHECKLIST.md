@@ -1,20 +1,20 @@
-# Release checklist
+# Release checklist — 27 September 2026
 
-## Implemented
-- French and Arabic routes, RTL layout and locale-preserving navigation.
-- Service prices from one authoritative data file; working category links/filters.
-- Real salon images from the requested film frames; continuous texture and section colour transitions.
-- Owner favicon and supplied social sharing artwork; per-page metadata, canonical and language alternates.
-- Environment-controlled indexing, robots and sitemap; preview indexing disabled.
-- Netlify configuration, Node version, locked dependencies, GitHub quality workflow, proprietary notice and asset credits.
-- Future products clearly labelled as placeholders. No false stock or purchase controls.
+## Completed locally
+- 27 owner-PDF service prices, service photos and per-service enquiry links.
+- Mobile widescreen hero controls; bridal portrait video, couple poster, seek/pause/fullscreen and supporting gallery.
+- Bridal date/time/service/inspiration message builder with matching clipboard/WhatsApp content.
+- Search/filter/sort/product detail catalogue; placeholders until real inventory is supplied.
+- TikTok, Instagram, WhatsApp and multi-account chooser support.
+- Supabase-backed admin code and two-role RLS schema prepared; NOT connected or live-auth tested.
+- Localized metadata, structured data, 12-route sitemap, preview/production indexing, Google verification asset.
+- Proprietary project notice, source credits, deployment and database setup documentation.
 
-## Before public launch
-- Correct OOH ZAZ to OHH ZAZ in the supplied social-sharing artwork/master brand artwork.
-- Confirm the final domain and set SITE_URL. Keep previews noindex; enable SITE_INDEXABLE only in the production context when approved.
-- Confirm permission to publish client photos and all owner-supplied artwork.
-- Obtain native review of Arabic terminology, and final approval of displayed address/prices/contact details.
-- Supply the salon's legal entity and required legal/contact information for final legal notice review. No legal entity or registration number has been invented.
-- Test the real Netlify deployment, redirects, social crawler rendering and mobile performance on a physical device. Local build and browser checks do not establish these hosted results.
+## Still external or awaiting owner content
+- VS Code agent deploys, verifies hosted behavior and configures Search Console.
+- Supabase provisioning and real authorization/persistence tests before admin use.
+- Correct OOH to OHH in supplied social-sharing raster master.
+- Owner final manual review, including Arabic wording, media permissions, legal entity information and business details.
+- Purchase/connect ohhzaz.com later; keep current origin until HTTPS and DNS are ready.
 
-The current contact experience is Instagram enquiry, not automatic scheduling. Admin, live product catalogue, inventory, checkout and payment remain future work.
+Appointment requests are enquiries, not confirmed bookings. No payment, inventory reservation or automatic scheduling is implemented. Do not label those future features production-ready.

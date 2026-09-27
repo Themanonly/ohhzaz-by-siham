@@ -20,3 +20,25 @@ Both are labelled inspiration, outside the salon's own work, in French and Arabi
 Product forms are original CSS illustrations. They are explicitly placeholders, with no invented brand partnerships, references, stock, prices, ratings, checkout or purchase controls.
 
 Obsolete public media variants were moved into ignored work/refresh/unused-public-media to reduce deployment clutter. They were not deleted from source storage.
+
+## Service photography — September 2026
+Locally optimized WebP and thumbnail derivatives. Commercial-use license: https://www.pexels.com/license/ . Photos illustrate treatments; they are not claims of work performed by OHH ZAZ or model endorsements. Related treatment variants share imagery. Source originals remain outside public deployment in ignored work/.
+
+| Asset | Pexels source |
+|---|---|
+| brushing | https://www.pexels.com/photo/hairdresser-making-woman-hairstyle-14615061/ |
+| coupe | https://www.pexels.com/photo/young-beautiful-woman-having-her-hair-cut-at-the-hairdresser-scissors-cut-the-girls-hair-19239103/ |
+| couleur | https://www.pexels.com/photo/close-up-of-hair-coloring-process-in-salon-29546551/ |
+| maquillage | https://www.pexels.com/photo/a-woman-using-a-makeup-brush-6713329/ |
+| ongles | https://www.pexels.com/photo/person-in-black-leather-gloves-holding-black-and-white-book-3997344/ |
+| pedicure | https://www.pexels.com/photo/close-up-of-woman-doing-pedicure-17056222/ |
+| epilation | https://www.pexels.com/photo/woman-doing-depilation-on-leg-with-wax-strip-6763618/ |
+| sourcils | https://www.pexels.com/photo/a-hand-plucking-the-eyebrow-of-a-client-5128275/ |
+| cils | https://www.pexels.com/photo/close-up-shot-of-a-person-getting-an-eyelash-extensions-5128234/ |
+| visage | https://www.pexels.com/photo/beautician-covering-woman-face-with-white-cosmetic-clay-12115017/ |
+| soin-cheveux | https://www.pexels.com/photo/woman-having-her-hair-rinse-3993451/ |
+| chignon | https://www.pexels.com/photo/ornate-bridal-hairstyle-with-floral-adornment-36648211/ |
+| teinture-sourcils | https://www.pexels.com/photo/woman-at-beautician-17282792/ |
+
+## Bridal film
+Owner-supplied ohh_zaz_1779466562_3902770728921105333_44080976396.mp4. Portrait dimensions preserved at 576×1024; web encode has no audio. Poster is the couple portrait at approximately 31 seconds. Source file unchanged.

@@ -14,8 +14,12 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - run: node scripts/check-content.mjs
       - run: npm run typecheck
       - run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: '1'
+          SITE_INDEXABLE: 'false'
+      - run: node scripts/check-production.mjs
+        env:
           SITE_INDEXABLE: 'false'
