@@ -15,7 +15,7 @@
   SITE_INDEXABLE = "false"
 
 [context.branch-deploy.environment]
-  SITE_INDEXABLE = "false"
+  SITE_INDEXABLE = "true"
 
 # Preserve shared links and consolidate search signals on the owned domain.
 [[redirects]]
