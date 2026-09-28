@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {trustedOrigin} from '../lib/request-security.ts';
 import {passwordHash,passwordMatches,digest} from '../lib/password.ts';
 import {scryptSync} from 'node:crypto';
-const live='https://ohhzaz-by-siham.netlify.app';
+const live='https://ohhzaz.com';
 assert.equal(trustedOrigin(live,live+'/api/admin/auth/login'),true);
 assert.equal(trustedOrigin('https://evil.invalid',live+'/api/admin/auth/login'),false);
 assert.equal(trustedOrigin('https://evil.invalid','https://evil.invalid/api/admin/auth/login'),false);

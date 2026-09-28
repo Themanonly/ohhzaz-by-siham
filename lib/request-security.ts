@@ -3,7 +3,7 @@ export function trustedOrigin(origin: string | null, requestUrl: string, configu
  if (!origin) return false;
  try {
   const request = new URL(requestUrl);
-  const allowed = new URL(configured || 'https://ohhzaz-by-siham.netlify.app').origin;
+  const allowed = new URL(configured || 'https://ohhzaz.com').origin;
   if (origin === allowed) return true;
   const source=new URL(origin);
   const loopback=['127.0.0.1','localhost'];

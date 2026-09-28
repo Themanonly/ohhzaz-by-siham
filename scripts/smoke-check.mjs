@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 const base=process.argv[2]||'http://127.0.0.1:3016';
-const origin=process.env.SITE_URL||'https://ohhzaz-by-siham.netlify.app';
+const origin=process.env.SITE_URL||'https://ohhzaz.com';
 const routes=['','mariee','prestations','produits','le-salon','contact'];
 const assets=new Set(['/brand/favicon-32.png','/brand/favicon-192.png','/brand/apple-touch-icon.png','/brand/social-sharing.jpg','/media/salon-wash-24.webp','/media/salon-colour-29.webp','/media/bridal-makeup-stock.webp','/media/bridal-details-stock.webp']);
 for(const locale of ['fr','ar'])for(const route of routes){

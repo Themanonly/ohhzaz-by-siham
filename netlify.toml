@@ -5,7 +5,7 @@
 [build.environment]
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
-  SITE_URL = "https://ohhzaz-by-siham.netlify.app"
+  SITE_URL = "https://ohhzaz.com"
   SITE_INDEXABLE = "false"
 
 [context.production.environment]
@@ -16,3 +16,16 @@
 
 [context.branch-deploy.environment]
   SITE_INDEXABLE = "false"
+
+# Preserve shared links and consolidate search signals on the owned domain.
+[[redirects]]
+  from = "https://ohhzaz-by-siham.netlify.app/*"
+  to = "https://ohhzaz.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://ohhzaz-by-siham.netlify.app/*"
+  to = "https://ohhzaz.com/:splat"
+  status = 301
+  force = true
