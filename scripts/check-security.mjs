@@ -1,0 +1,36 @@
+import assert from 'node:assert/strict';
+import {trustedOrigin} from '../lib/request-security.ts';
+import {passwordHash,passwordMatches,digest} from '../lib/password.ts';
+import {scryptSync} from 'node:crypto';
+const live='https://ohhzaz-by-siham.netlify.app';
+assert.equal(trustedOrigin(live,live+'/api/admin/auth/login'),true);
+assert.equal(trustedOrigin('https://evil.invalid',live+'/api/admin/auth/login'),false);
+assert.equal(trustedOrigin('https://evil.invalid','https://evil.invalid/api/admin/auth/login'),false);
+assert.equal(trustedOrigin(null,live),false);
+assert.equal(trustedOrigin('http://127.0.0.1:3031','http://127.0.0.1:3031/api/admin'),true);
+assert.equal(trustedOrigin('http://127.0.0.1:3032','http://127.0.0.1:3031/api/admin'),false);
+assert.equal(trustedOrigin('https://ohhzaz.com',live,'https://ohhzaz.com/fr'),true);
+const hash=passwordHash('test-only-not-a-real-account');
+assert(await passwordMatches('test-only-not-a-real-account',hash));
+assert.equal(await passwordMatches('wrong',hash),false);
+assert.equal(await passwordMatches('wrong','malformed'),false);
+assert.notEqual(hash,passwordHash('test-only-not-a-real-account'));
+assert.equal(digest('example').length,64);
+const salt='00'.repeat(16);const legacy=salt+':'+scryptSync('legacy-test',salt,64,{N:16384,r:8,p:1}).toString('hex');
+assert(await passwordMatches('legacy-test',legacy),'Existing accounts must retain access');
+console.log('PASS: origin allowlist, domain configuration, salted password verification, malformed hashes.');
+const base=process.argv[2];
+if(base){
+ const page=await fetch(base+'/fr');const html=await page.text();
+ const csp=page.headers.get('content-security-policy');
+ assert.match(csp,/script-src[^;]*'nonce-/);assert.match(csp,/frame-ancestors 'none'/);
+ assert.doesNotMatch(csp,/script-src[^;]*'unsafe-inline'/);
+ const nonce=csp.match(/'nonce-([^']+)'/)[1];
+ for(const script of html.matchAll(/<script\b[^>]*>/g))assert.ok(script[0].includes(`nonce="${nonce}"`),'Every server-rendered script needs a nonce');
+ const second=await fetch(base+'/fr');assert.notEqual(second.headers.get('content-security-policy'),csp);
+ assert.match(page.headers.get('cache-control'),/no-store/);
+ assert.equal((await fetch(base+'/api/admin/data/products')).status,401);
+ assert.equal((await fetch(base+'/api/admin/auth/login',{method:'POST',headers:{Origin:'https://evil.invalid','Content-Type':'application/json'},body:'{}'})).status,403);
+ assert.equal((await fetch(base+'/api/media/00000000-0000-0000-0000-000000000000')).status,404);
+ console.log('PASS: CSP nonces, uncached pages, anonymous API rejection, CSRF rejection, unpublished media denial.');
+}

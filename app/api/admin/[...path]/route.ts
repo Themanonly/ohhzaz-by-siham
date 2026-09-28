@@ -2,9 +2,10 @@ import {cookies} from 'next/headers';
 import {randomBytes,randomUUID} from 'node:crypto';
 import sharp from 'sharp';
 import {database,databaseReady} from '../../../../lib/db';
-import {digest,passwordMatches} from '../../../../lib/password';
+import {digest,passwordMatches,needsPasswordUpgrade,upgradedPasswordHash} from '../../../../lib/password';
 import {contactIdentity,contactHref} from '../../../../lib/contacts';
 import {validServices} from '../../../../lib/catalogue-validation';
+import {trustedOrigin} from '../../../../lib/request-security';
 import type {SocialLink} from '../../../../data/catalogue';
 export const runtime='nodejs';
 const COOKIE='ohhzaz_session';
@@ -14,23 +15,21 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
  if(!databaseReady())return json({error:'Database not configured'},503);
  const path=(await params).path.join('/');const url=new URL(req.url);const mutation=req.method!=='GET';
  const origin=req.headers.get('origin');
- const requestHost=req.headers.get('host');
- const localHost=!!requestHost&&/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(requestHost);
- const publicOrigin=process.env.SITE_URL||'https://ohhzaz-by-siham.netlify.app';
- const sameOrigin=origin===publicOrigin||origin===url.origin||origin===`${localHost?'http':'https'}://${requestHost}`;
- if(mutation&&!sameOrigin)return json({error:'Origin rejected'},403);
+ if(mutation&&!trustedOrigin(origin,req.url,process.env.SITE_URL))return json({error:'Origin rejected'},403);
+ if(mutation&&path!=='uploads'&&path!=='auth/logout'&&!(req.headers.get('content-type')||'').startsWith('application/json'))return json({error:'JSON required'},415);
  const db=database();const jar=await cookies();
  try{
  if(path==='auth/login'&&req.method==='POST'){
-  const b=JSON.parse((await bytes(req,4096)).toString());const email=String(b.email||'').trim().toLowerCase();const password=String(b.password||'');if(!email||email.length>254||password.length>256)return json({error:'Invalid login'},401);
+  const b=JSON.parse((await bytes(req,4096)).toString());if(!b||typeof b!=='object'||Array.isArray(b))return json({error:'Invalid login'},401);const email=String(b.email||'').trim().toLowerCase();const password=String(b.password||'');if(!email||email.length>254||password.length>256)return json({error:'Invalid login'},401);
   for(const [key,max] of [[digest(email),8],['global',150]] as const){const limit=await db.query(`INSERT INTO salon_login_limits(key,attempts,reset_at) VALUES($1,1,now()+interval '15 minutes') ON CONFLICT(key) DO UPDATE SET attempts=CASE WHEN salon_login_limits.reset_at<now() THEN 1 ELSE salon_login_limits.attempts+1 END, reset_at=CASE WHEN salon_login_limits.reset_at<now() THEN now()+interval '15 minutes' ELSE salon_login_limits.reset_at END RETURNING attempts`,[key]);if(limit.rows[0].attempts>max)return json({error:'Try again later'},429);}
   const staff=(await db.query('SELECT id,password_hash,role FROM salon_staff WHERE email=$1 AND active=true',[email])).rows[0];
-  const valid=passwordMatches(password,staff?.password_hash||'00000000000000000000000000000000:'+ '00'.repeat(64));if(!staff||!valid)return json({error:'Invalid login'},401);
+  const valid=await passwordMatches(password,staff?.password_hash||'scrypt-v2:00000000000000000000000000000000:'+ '00'.repeat(64));if(!staff||!valid||!['admin','manager'].includes(staff.role))return json({error:'Invalid login'},401);
+  if(needsPasswordUpgrade(staff.password_hash))await db.query('UPDATE salon_staff SET password_hash=$1 WHERE id=$2 AND password_hash=$3',[await upgradedPasswordHash(password),staff.id,staff.password_hash]);
   const token=randomBytes(32).toString('hex');await db.query('DELETE FROM salon_sessions WHERE expires_at<now()');await db.query("INSERT INTO salon_sessions(token_hash,user_id,expires_at) VALUES($1,$2,now()+interval '8 hours')",[digest(token),staff.id]);
   jar.set(COOKIE,token,{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'strict',path:'/',maxAge:28800});return json({role:staff.role});
  }
  const token=jar.get(COOKIE)?.value;const staff=token?(await db.query('SELECT s.id,s.role FROM salon_sessions t JOIN salon_staff s ON s.id=t.user_id WHERE t.token_hash=$1 AND t.expires_at>now() AND s.active=true',[digest(token)])).rows[0]:null;
- if(!staff)return json({error:'Authentication required'},401);
+ if(!staff||!['admin','manager'].includes(staff.role))return json({error:'Authentication required'},401);
  if(path==='auth/logout'&&req.method==='POST'){await db.query('DELETE FROM salon_sessions WHERE token_hash=$1',[digest(token!)]);jar.delete(COOKIE);return json({ok:true});}
  if(path==='auth/session'&&req.method==='GET')return json({role:staff.role});
  if(path==='uploads'&&req.method==='POST'){
@@ -44,7 +43,7 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
  const id=url.searchParams.get('id')?.replace(/^eq\./,'');
  if(req.method==='DELETE'){if(table!=='social_links'||!id)return json({error:'Unsupported deletion'},400);await db.query('DELETE FROM social_links WHERE id=$1',[id]);return json({ok:true});}
  if(!['POST','PATCH'].includes(req.method))return json({error:'Method not allowed'},405);
- const b=JSON.parse((await bytes(req,100000)).toString());const loc=(v:unknown)=>!!v&&typeof v==='object'&&['fr','ar'].every(l=>typeof (v as Record<string,unknown>)[l]==='string'&&String((v as Record<string,unknown>)[l]).trim().length>0&&String((v as Record<string,unknown>)[l]).length<=160);
+ const b=JSON.parse((await bytes(req,100000)).toString());if(!b||typeof b!=='object'||Array.isArray(b))return json({error:'Invalid request'},400);const loc=(v:unknown)=>!!v&&typeof v==='object'&&['fr','ar'].every(l=>typeof (v as Record<string,unknown>)[l]==='string'&&String((v as Record<string,unknown>)[l]).trim().length>0&&String((v as Record<string,unknown>)[l]).length<=160);
  let values:Record<string,unknown>;
  if(table==='products'){
   if(!loc(b.name)||!Number.isFinite(b.price)||b.price<0||b.price>99999999||!['draft','published'].includes(b.status)||typeof b.category_id!=='string'||!/^\/api\/media\/[0-9a-f-]{36}$/.test(b.image))return json({error:'Invalid product'},400);

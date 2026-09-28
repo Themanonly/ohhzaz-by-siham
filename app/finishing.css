@@ -1,0 +1,71 @@
+/* Shared finishing details: restrained motion, clear controls, quiet surfaces. */
+.film-copy h1{max-width:850px;text-wrap:balance;text-shadow:0 2px 32px #17110d35}
+.film-copy .eyebrow{display:flex;align-items:center;gap:16px}
+.film-copy .eyebrow:before{content:'';width:34px;height:1px;background:currentColor;opacity:.7;flex-shrink:0}
+.film-actions .button,.film-actions .film-link{transition:background .25s,transform .25s,box-shadow .25s}
+.film-actions .button:hover{transform:translateY(-3px);box-shadow:0 12px 30px #120d1833}
+.film-actions svg{flex-shrink:0}
+.film-hero .hero-video-tools{z-index:3}
+.hero-film-stage{z-index:0}.film-veil{z-index:1}.film-copy,.film-bottom{z-index:2}
+.hero-video-tools{bottom:30px}
+.hero-video-tools{display:flex;gap:10px;align-items:center}.hero-film-stage:fullscreen{background:#19150f;z-index:10}.hero-film-stage:fullscreen .hero-film{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.hero-film-stage:fullscreen .hero-video-tools{inset-inline:24px;bottom:24px;justify-content:flex-end}.hero-film-stage:fullscreen .hero-film-label{margin-inline-end:auto}
+.film-copy{animation:salon-arrive .75s ease-out both}
+@keyframes salon-arrive{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+.discovery-card:focus-visible,.catalogue-card:focus-visible{outline:2px solid #73583b;outline-offset:7px;border-radius:12px}
+.products.page-start>.section-heading{align-items:end;gap:40px;border-bottom:1px solid #bda78b66;padding-bottom:36px;margin-bottom:28px}
+.products.page-start h1{max-width:720px;text-wrap:balance}
+.products-intro{max-width:410px;color:#6e5a45;line-height:1.85}
+.catalogue-toolbar{padding:16px 22px;background:#fffaf1c9;border:1px solid #cbbb9f77;border-radius:18px;gap:30px}
+.catalogue-search{border-bottom:0;max-width:none}.catalogue-search input{padding-inline:0;min-height:44px}
+.catalogue-sort select{border-color:#c4b296;background:#fcf8ef}
+.catalogue-filters{gap:8px;flex-wrap:wrap}.catalogue-filters button{min-height:44px;border-radius:30px;transition:background .2s,color .2s}
+.catalogue-results{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:20px 0}
+.catalogue-results .catalogue-count{margin:0;color:#705c46}.catalogue-results button{display:flex;align-items:center;gap:8px;font-size:12px;min-height:44px}
+.catalogue-card{border:1px solid #bda98a66;border-radius:70px 70px 12px 12px;background:#faf6edbd;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s}
+.catalogue-card:hover{transform:translateY(-5px);border-color:#a58a62;box-shadow:0 16px 30px #49331b12}
+.catalogue-image{border-radius:0}.catalogue-copy{padding:22px}.catalogue-copy h2{font-size:clamp(25px,2.4vw,34px);line-height:1.15}
+.catalogue-copy .catalogue-category{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#70583e;margin:0 0 12px}
+.catalogue-placeholder{background:radial-gradient(ellipse at 30% 25%,#fffaf0,#e2d4bf 85%);position:relative}
+.catalogue-placeholder:before{content:'';position:absolute;inset:12%;border:1px solid #9d805333;border-radius:50% 50% 8px 8px;pointer-events:none}
+.catalogue-card[data-category=cheveux] .catalogue-placeholder{background:radial-gradient(ellipse at 30% 25%,#f9f8ef,#c9cdb7)}
+.catalogue-card[data-category=brosses] .catalogue-placeholder{background:radial-gradient(ellipse at 30% 25%,#fff4eb,#dac0b2)}
+.catalogue-card[data-category=appareils] .catalogue-placeholder{background:radial-gradient(ellipse at 30% 25%,#f6f1e9,#c8beb0)}
+.catalogue-arrow{transition:background .25s,transform .25s}.catalogue-card:hover .catalogue-arrow{background:#806442;transform:rotate(8deg)}
+.product-dialog-image .catalogue-placeholder{height:100%;min-height:350px}.product-dialog-copy{justify-content:center}.product-dialog-copy h2{line-height:1.1}
+.product-dialog-copy .button{font-size:12px;line-height:1.6;white-space:normal}.product-dialog-copy p{line-height:1.8}
+.admin-panel{max-width:1280px;padding:48px 5% 90px}
+.admin-heading{border-bottom:1px solid #bba68677;padding-bottom:25px;position:relative}
+.admin-topline{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.admin-topline .eyebrow{margin:0;color:#796346;font-size:10px;letter-spacing:2.5px}
+.admin-topline a{display:flex;align-items:center;gap:10px;font-size:12px;min-height:44px}
+.admin-heading h1{font-size:clamp(42px,5vw,64px);margin:27px 0 20px;line-height:1.1}
+.admin-session{display:flex;align-items:center;gap:10px;color:#68563f;font-size:12px;line-height:1.8;max-width:650px}
+.admin-session svg{flex-shrink:0;color:#526043}.admin-logout{display:inline-flex;align-items:center;gap:8px;font-size:12px;margin-top:18px;min-height:44px}
+.admin-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:28px 0}
+.admin-overview>div{display:grid;grid-template-columns:1fr auto;gap:8px;padding:21px 24px;border:1px solid #bda98a77;border-radius:16px;background:#fbf7efd9}
+.admin-overview svg{color:#87704c;grid-column:2;grid-row:1/3;align-self:center}.admin-overview strong{font-family:var(--serif);font-weight:500;font-size:36px;line-height:1}.admin-overview span{font-size:12px;color:#6b5740}
+.admin-tabs{width:100%;border-radius:16px;background:#f7f1e7f0;padding:7px;gap:5px;margin-top:28px}
+.admin-tabs button{display:flex;align-items:center;justify-content:center;gap:9px;flex:1;border-radius:11px;min-height:48px;font-size:13px}
+.admin-panel form{max-width:100%;background:#fcf9f2ed;border-radius:18px;box-shadow:0 10px 35px #38281608;padding:30px}
+.admin-panel form:has(input[type=file]){border-radius:18px}.admin-panel h2{font-size:36px;margin-top:30px}
+.admin-panel label{font-size:13px;line-height:1.6}.admin-panel input,.admin-panel select,.admin-panel textarea{min-height:48px;background:#fffdf9}
+.admin-panel .inline-field input{min-height:20px}.admin-panel .button{justify-self:start;min-width:210px}
+.admin-form-intro{font-size:13px;line-height:1.8;color:#6f5c46;margin:0 0 8px}.admin-product-preview{width:150px;height:150px;object-fit:contain;border:1px solid #c9b89c;border-radius:12px;background:#f1e8da}
+.admin-row .admin-product-thumb{width:58px;height:68px;object-fit:contain;border-radius:9px;background:#f5edde}.admin-row span{flex:1}.admin-list{max-width:none}
+.admin-row button{min-height:44px}.admin-row:hover{transform:none}.admin-empty{padding:24px;border:1px dashed #bba483;border-radius:12px;line-height:1.8;font-size:13px;color:#725e45}
+.admin-login{max-width:820px}.admin-login h1{font-size:clamp(40px,6vw,64px)}.admin-login form{margin-top:30px}.admin-login .button{width:100%}
+.admin-panel form>.admin-pair+.admin-pair{padding-top:20px;border-top:1px solid #d4c4ac80}
+.admin-panel>p.admin-status{display:block;padding:0;background:none;border-radius:0;min-height:20px}.admin-panel>p.admin-status:before,.admin-panel>p.eyebrow:before{content:none}
+.admin-panel .admin-service-group{border:1px solid #bda98a77;border-radius:14px;background:#fbf7efd9;padding:0;margin:16px 0;overflow:hidden}
+.admin-service-group>summary{font:28px var(--serif);padding:20px 24px;color:var(--espresso);list-style-position:inside;min-height:64px}
+.admin-service-group>summary>span{float:inline-end;font:12px var(--sans);margin-top:9px;color:#776045}
+.admin-panel .admin-service-group>form{margin:0;border:0;border-radius:0;box-shadow:none;border-top:1px solid #d4c4ac80}
+.admin-panel .admin-service-group>form>button[type=button]{justify-self:start;min-height:44px;border:1px solid #bda98a;border-radius:30px;background:transparent;padding:10px 20px;color:var(--espresso)}
+@media(min-width:761px){.admin-heading .admin-logout{position:absolute;inset-inline-end:0;bottom:24px}.admin-session{padding-inline-end:145px;max-width:100%}}
+@media(max-width:760px){
+ .film-copy{padding-bottom:28px}.film-copy h1{font-size:clamp(45px,12vw,66px);line-height:1.04}.film-copy .eyebrow:before{width:22px}.film-actions .film-link{border:1px solid #dbc5a655;border-radius:30px;align-items:center}.film-actions .button{align-items:center}.film-bottom{border-top:1px solid #d2b99022;margin-inline:7%;padding-inline:0;padding-top:20px}.hero-video-tools{bottom:10px;justify-content:flex-end}.hero-film-label{margin-inline-end:auto}
+ .products.page-start>.section-heading{display:block;padding-bottom:25px}.products-intro{margin-top:22px}.catalogue-toolbar{padding:15px;gap:12px}.catalogue-sort{padding-top:12px;border-top:1px solid #c4b29655}.catalogue-grid{gap:12px}.catalogue-card{border-radius:48px 48px 10px 10px}.catalogue-copy{padding:17px 12px}.catalogue-copy h2{font-size:23px;overflow-wrap:anywhere}.catalogue-copy .catalogue-category{font-size:8px;letter-spacing:.7px}.catalogue-results{align-items:start}.catalogue-results button{font-size:11px}.catalogue-badge{max-width:calc(100% - 42px);line-height:1.5}.product-dialog-image .catalogue-placeholder{min-height:220px}.product-dialog-copy h2{font-size:32px}
+ .admin-panel{padding:28px 5% 60px}.admin-overview{gap:8px}.admin-overview>div{padding:15px 11px;grid-template-columns:1fr}.admin-overview svg{display:none}.admin-overview span{font-size:10px}.admin-overview strong{font-size:30px}.admin-tabs{display:grid;grid-template-columns:1fr 1fr;overflow:visible}.admin-tabs button{font-size:12px;padding:10px 8px;white-space:normal}.admin-panel form{padding:20px}.admin-panel h2{font-size:31px}.admin-panel .button{width:100%;min-width:0}.admin-heading h1{margin-top:24px}.admin-topline .eyebrow{font-size:9px;letter-spacing:1.6px}.admin-row .admin-product-thumb{width:48px;height:58px}.admin-row span{flex:1 1 65%}
+ [dir=rtl] .catalogue-copy .catalogue-category{letter-spacing:0;font-size:12px}[dir=rtl] .catalogue-copy h2{font-size:26px}[dir=rtl] .film-scroll{font-size:13px;letter-spacing:0}
+}
+@media(prefers-reduced-motion:reduce){.film-copy{animation:none}.catalogue-card,.catalogue-arrow,.film-actions .button,.film-actions .film-link{transition:none}.catalogue-card:hover,.film-actions .button:hover,.catalogue-card:hover .catalogue-arrow{transform:none}}
