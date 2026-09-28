@@ -6,7 +6,7 @@
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
   SITE_URL = "https://ohhzaz.com"
-  SITE_INDEXABLE = "false"
+  SITE_INDEXABLE = "true"
 
 [context.production.environment]
   SITE_INDEXABLE = "true"
@@ -15,7 +15,7 @@
   SITE_INDEXABLE = "false"
 
 [context.branch-deploy.environment]
-  SITE_INDEXABLE = "true"
+  SITE_INDEXABLE = "false"
 
 # Preserve shared links and consolidate search signals on the owned domain.
 [[redirects]]
