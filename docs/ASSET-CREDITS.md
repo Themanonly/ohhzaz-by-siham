@@ -2,7 +2,7 @@
 
 ## Owner-supplied brand files
 - FAVICON: the downloaded circular S artwork, PNG 1254 x 1254. Browser and Apple derivatives in public/brand/; transparent margin trimmed and resized only.
-- SOCIAL SHARING TEMPLATE: the downloaded 1536 x 1024 artwork, resized to 1200 x 800 JPEG without cropping. The original contains the spelling OOH ZAZ, while the site name is OHH ZAZ. A corrected master is still needed before public launch; source remains unchanged.
+- SOCIAL SHARING TEMPLATE: the supplied source has an OOH spelling and remains unchanged outside the project. The deployed sharing card is now an original editable vector design, public/brand/social-sharing.svg, rendered to a 1200 × 630 JPEG with the correct OHH ZAZ name. It uses the site's sand/espresso identity and original geometric ornament.
 - BACKGROUND / MOBILE BACKGROUND: optimized owner texture. One continuous viewport backdrop with transparent section colour washes avoids repeated seams. No AI enlargement or invented detail.
 
 ## Real salon imagery

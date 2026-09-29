@@ -1,0 +1,32 @@
+.site-footer{position:relative;color:#f4ebdd;background:linear-gradient(180deg,#4a382800,#4a3828ed 100px,#30251bef 280px);padding:70px max(6%,calc((100% - 1280px)/2)) 0}
+.footer-invitation{text-align:center;padding:60px 0 72px;max-width:730px;margin:auto}
+.footer-invitation>svg{width:25px;height:25px;color:#ceb78f;margin-bottom:20px}
+.footer-invitation .eyebrow{color:#d7c4a5;font-size:10px;margin-bottom:20px}
+.footer-invitation h2{font-size:clamp(34px,4vw,54px);line-height:1.15;text-wrap:balance}
+.footer-invitation .button{margin-top:28px;border-color:#cdb58e;color:#fff8ed}
+.footer-directory{display:grid;grid-template-columns:1.2fr 1.2fr .7fr;gap:clamp(24px,5vw,80px);padding:44px 0;border-top:1px solid #ccb99445;align-items:start}
+.footer-identity .brand{align-items:flex-start;text-align:start;width:fit-content;color:#fff6e8}
+.footer-identity .brand>span{font-size:34px}.footer-identity .brand small{font-size:8px;letter-spacing:2px;margin-top:9px}
+.footer-identity address{font-style:normal;font-size:12px;line-height:1.85;color:#d4c4ad;margin:22px 0 8px}
+.footer-map{display:inline-flex;gap:10px;align-items:center;min-height:44px;font-size:12px}
+.footer-navigation{display:grid;grid-template-columns:1fr 1fr;gap:0 25px;align-items:start}
+.footer-navigation a{display:flex;align-items:center;min-height:44px;font-size:12px;color:#e7dac6;padding:8px 0}
+.footer-navigation a[aria-current=page]{color:#fff9f1;text-decoration:underline;text-underline-offset:7px;text-decoration-color:#a58a62}
+.footer-networks{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.footer-networks>.eyebrow{color:#d4c4ad;font-size:9px;letter-spacing:1.5px;margin:0 0 7px}
+.footer-account{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:44px;border:1px solid #ccb99455;border-radius:30px;padding:10px 16px;background:transparent;color:#fff2dd;font-size:12px;text-align:start}
+.footer-account:hover,.footer-account:focus-visible{background:#dac6a420;border-color:#d8c3a1}
+.footer-colophon{border-top:1px solid #ccb99445;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:25px 0 30px;color:#d4c4ad;font-size:11px;text-align:start;line-height:1.8}
+.footer-colophon p{line-height:1.8}.footer-colophon>p:last-child{text-align:end}.footer-colophon>a{min-height:44px;display:flex;align-items:center;text-decoration:underline;text-underline-offset:4px}
+.site-footer a:focus-visible,.site-footer button:focus-visible{outline-color:#f7ddb0}
+.site-information{max-width:1080px;margin:auto}.site-information h1{max-width:850px}.site-information article{margin:40px 0;max-width:760px}.site-information h2{font-size:30px;margin-bottom:14px}.site-information p{font-size:15px;line-height:1.9}.site-information article p{color:#695943}
+[dir=rtl] .site-information p{font-size:18px;line-height:1.95}
+[dir=rtl] .footer-navigation a,[dir=rtl] .footer-account,[dir=rtl] .footer-map{font-size:16px}[dir=rtl] .footer-colophon{font-size:13px}[dir=rtl] .footer-networks>.eyebrow{font-size:13px;letter-spacing:0}
+@media(max-width:760px){
+ .site-footer{padding:55px 7% 0}.footer-invitation{padding:50px 0 40px}.footer-invitation h2{font-size:36px}.footer-invitation .eyebrow{font-size:9px}
+ .footer-directory{grid-template-columns:1fr;gap:28px;padding:30px 0}.footer-identity .brand>span{font-size:32px}.footer-identity address{margin-top:18px}
+ .footer-navigation{gap:0 24px}.footer-navigation a{border-bottom:1px solid #ccb99425;min-height:48px}
+ .footer-networks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.footer-networks>.eyebrow{grid-column:1/-1}.footer-account{justify-content:center;gap:5px;padding:10px 5px;font-size:10px}.footer-account svg{width:13px}
+ .footer-colophon{display:grid;grid-template-columns:1fr;gap:13px;padding:22px 0 30px}.footer-colophon>p:last-child{text-align:start}.footer-colophon>a{grid-row:1;min-height:44px}.footer-colophon p bdi{display:inline-block}
+ [dir=rtl] .footer-account{font-size:12px}[dir=rtl] .footer-invitation h2{font-size:37px}.site-information h1{font-size:43px}.site-information h2{font-size:28px}
+}

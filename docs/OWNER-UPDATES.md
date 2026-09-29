@@ -1,3 +1,5 @@
+> Historical snapshot. Superseded by DEPLOYMENT.md and PRODUCTION-AUDIT-2026-09-29.md for current status. Do not execute old pending setup steps without checking the current system.
+
 # Owner updates — 20 September 2026
 
 - Opening hours confirmed directly: Monday–Wednesday 09:30–19:30; Thursday–Saturday 09:30–20:00; Sunday closed.

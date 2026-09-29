@@ -20,9 +20,9 @@ Full admin manages products, categories, services and contact accounts. Manager 
 Read docs/ADMIN-SETUP.md before enabling it. DATABASE_URL is a server-only secret; never expose it through NEXT_PUBLIC variables.
 
 ## Deployment
-Deployment is assigned to the user’s VS Code agent. Follow docs/VS-CODE-DEPLOYMENT-PROMPT.md.
-Current origin: https://ohhzaz-by-siham.netlify.app. Future ohhzaz.com must not become canonical until purchased, connected and HTTPS-ready.
-Production Netlify context enables indexing; preview contexts disable it. Changing SITE_URL or indexing settings requires a rebuild because sitemap/robots are generated at build time.
+Follow docs/DEPLOYMENT.md. Current production origin: https://ohhzaz.com, hosted by the existing Netlify project, with Cloudflare DNS and Railway PostgreSQL.
+Only French and Arabic pages are published. The sitemap includes their alternate-language links; English and Darija routes are intentionally absent.
+Indexing requires explicit SITE_INDEXABLE=true and an HTTPS origin; Netlify preview contexts always disable it. The normalized origin and indexing decision are embedded at build time so page metadata, sitemap and robots remain consistent. Changing these settings requires a rebuild.
 Use the Next.js integration, not a generic SPA redirect or static export.
 
 ## Rights

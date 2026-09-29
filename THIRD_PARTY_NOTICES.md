@@ -3,6 +3,7 @@
 The proprietary project license excludes third-party materials.
 
 - Next.js and React: MIT; retain package license notices in installed distributions.
+- node-postgres (pg): MIT; retain its package license notice.
 - Lucide icons: ISC; retain its package notice.
 - Sharp: Apache-2.0; its bundled libraries have their own notices.
 - Cormorant Garamond, DM Sans and Noto Naskh Arabic: SIL Open Font License. Full notices are in public/licenses/.

@@ -46,7 +46,8 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
  const b=JSON.parse((await bytes(req,100000)).toString());if(!b||typeof b!=='object'||Array.isArray(b))return json({error:'Invalid request'},400);const loc=(v:unknown)=>!!v&&typeof v==='object'&&['fr','ar'].every(l=>typeof (v as Record<string,unknown>)[l]==='string'&&String((v as Record<string,unknown>)[l]).trim().length>0&&String((v as Record<string,unknown>)[l]).length<=160);
  let values:Record<string,unknown>;
  if(table==='products'){
-  if(!loc(b.name)||!Number.isFinite(b.price)||b.price<0||b.price>99999999||!['draft','published'].includes(b.status)||typeof b.category_id!=='string'||!/^\/api\/media\/[0-9a-f-]{36}$/.test(b.image))return json({error:'Invalid product'},400);
+  if(!loc(b.name)||!Number.isFinite(b.price)||b.price<0||b.price>99999999||!['draft','published'].includes(b.status)||typeof b.category_id!=='string'||!/^\/api\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(b.image))return json({error:'Invalid product'},400);
+  if(!(await db.query('SELECT 1 FROM salon_media WHERE id=$1',[b.image.split('/').at(-1)])).rowCount)return json({error:'Upload a valid product photo first'},400);
   if(b.description!=null&&(!['fr','ar'].every(l=>typeof b.description[l]==='string'&&b.description[l].length<=2000)))return json({error:'Invalid description'},400);
   values={name:b.name,description:b.description||{fr:'',ar:''},price:b.price,category_id:b.category_id,image:b.image,status:b.status};
  }else if(table==='product_categories'){if(!loc(b.name))return json({error:'Invalid category'},400);values={name:b.name};}

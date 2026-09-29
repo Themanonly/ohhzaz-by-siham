@@ -1,3 +1,5 @@
+> Historical snapshot. Superseded by DEPLOYMENT.md and PRODUCTION-AUDIT-2026-09-29.md for current status. Do not execute old pending setup steps without checking the current system.
+
 # Railway continuation — 27 September 2026
 
 ## Verified

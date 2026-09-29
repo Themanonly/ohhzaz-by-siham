@@ -16,3 +16,5 @@ assert.equal(validCategory({id:'x',name:{fr:'Test'}}),false);
 assert.equal(validProduct({id:'x',name:{fr:'x',ar:'x'},category_id:'a',price:-1,image:'https://example.com/a.jpg',status:'published'}),false);
 assert.equal(validServices({...categories[0],items:[{fr:'x',ar:'x',price:20,image:'../../secret'}]}),false);
 console.log('PASS 27 authoritative prices, all service thumbnails, contact safety, exact WhatsApp encoding, catalogue validation');
+
+for(const invalid of [{minutes:-1},{alternative:'free'},{price:Infinity},{fr:'x'.repeat(161)}])assert.equal(validServices({...categories[0],items:[{...categories[0].items[0],...invalid}]}),false);

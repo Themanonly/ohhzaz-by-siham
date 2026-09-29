@@ -1,6 +1,6 @@
-const configured = process.env.SITE_URL?.trim();
-// Public metadata must remain stable in builds, previews and server runtimes.
-export const siteUrl = new URL(new URL(configured || 'https://ohhzaz.com').origin);
-export const indexable = siteUrl.protocol === 'https:' && (!process.env.CONTEXT || process.env.CONTEXT === 'production');
-export const routes = ['', 'mariee', 'prestations', 'produits', 'le-salon', 'contact'];
+// These non-secret values are resolved once in next.config.ts and embedded in
+// the build so static sitemaps and server-rendered metadata cannot disagree.
+export const siteUrl = new URL(process.env.SITE_URL || 'https://ohhzaz.com');
+export const indexable = process.env.SITE_INDEXABLE === 'true';
+export const routes = ['', 'mariee', 'prestations', 'produits', 'le-salon', 'contact', 'mentions-legales'];
 export const pathFor = (locale:string, route:string) => `/${locale}${route ? '/' + route : ''}`;

@@ -1,20 +1,13 @@
-# Release checklist — 27 September 2026
+# Release checklist
 
-## Completed locally
-- 27 owner-PDF service prices, service photos and per-service enquiry links.
-- Mobile widescreen hero controls; bridal portrait video, couple poster, seek/pause/fullscreen and supporting gallery.
-- Bridal date/time/service/inspiration message builder with matching clipboard/WhatsApp content.
-- Search/filter/sort/product detail catalogue; placeholders until real inventory is supplied.
-- TikTok, Instagram, WhatsApp and multi-account chooser support.
-- Railway-backed admin API and database verified locally with both roles. See RAILWAY-HANDOFF.md; hosted activation is pending.
-- Localized metadata, structured data, 12-route sitemap, preview/production indexing, Google verification asset.
-- Proprietary project notice, source credits, deployment and database setup documentation.
+Use DEPLOYMENT.md for current operations and PRODUCTION-AUDIT-2026-09-29.md for review evidence.
 
-## Still external or awaiting owner content
-- VS Code agent deploys, verifies hosted behavior and configures Search Console.
-- Private credential rotation, restricted runtime role, owner/manager account setup, and hosted verification before admin use.
-- Correct OOH to OHH in supplied social-sharing raster master.
-- Owner final manual review, including Arabic wording, media permissions, legal entity information and business details.
-- Purchase/connect ohhzaz.com later; keep current origin until HTTPS and DNS are ready.
+- Run source, content, indexing, password and origin checks.
+- Build explicitly for the owned production domain and verify all 14 localized routes, canonical links, sitemap alternates, robots, media and 404 responses.
+- Verify database TLS, staff role boundaries, session handling, upload/publication rules and fixture cleanup with the database test script.
+- Inspect shared header/footer, public page layouts, interactions and admin in the real browser at desktop/mobile sizes, including Arabic RTL.
+- Review the final diff and confirm no secrets or local exports enter Git.
+- Push to the existing production branch, then confirm the published Netlify commit and repeat live smoke/security checks.
+- Preserve Google verification records and sitemap submission. Report indexing separately from deployment.
 
-Appointment requests are enquiries, not confirmed bookings. No payment, inventory reservation or automatic scheduling is implemented. Do not label those future features production-ready.
+Owner follow-up: supply genuine product inventory when ready; create a separate manager account only when requested; review business wording and media permissions. Backups and restoration must be verified in Railway before claiming disaster recovery readiness. Appointments remain enquiries; payments and automatic booking are not implemented.

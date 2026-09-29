@@ -42,6 +42,7 @@ try {
   assert.equal((await fetch(base+mediaUrl)).status,404);
   assert.equal((await fetch(base+mediaUrl,{headers:{Cookie:manager}})).status,200);
   const product={name:{fr:'Temporary QA product',ar:'اختبار مؤقت'},price:10,category_id:categoryId,image:mediaUrl,status:'published'};
+  assert.equal((await request('data/products','POST',{...product,image:'/api/media/'+randomUUID()},manager)).status,400);
   const createdProduct=await request('data/products','POST',product,manager);assert.equal(createdProduct.status,200);productId=(await createdProduct.json())[0].id;
   assert.equal((await fetch(base+mediaUrl)).status,200);
   assert.equal((await request('data/products?id='+productId,'PATCH',{...product,status:'draft'},manager)).status,200);

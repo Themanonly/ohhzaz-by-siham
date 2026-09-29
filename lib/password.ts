@@ -7,7 +7,9 @@ export async function upgradedPasswordHash(password:string){const salt=randomByt
 export const needsPasswordUpgrade=(stored:string)=>!stored.startsWith(prefix);
 export async function passwordMatches(password:string,stored:string){
  const modern=stored.startsWith(prefix);
- const [salt,hash]=(modern?stored.slice(prefix.length):stored).split(':');
+ const parts=(modern?stored.slice(prefix.length):stored).split(':');
+ if(parts.length!==2)return false;
+ const [salt,hash]=parts;
  if(!/^[a-f0-9]{32}$/.test(salt||'')||!/^[a-f0-9]{128}$/.test(hash||''))return false;
  const expected=Buffer.from(hash,'hex');
  const actual=await new Promise<Buffer>((resolve,reject)=>scrypt(password,salt,64,modern?current:{N:16384,r:8,p:1},(error,key)=>error?reject(error):resolve(key)));

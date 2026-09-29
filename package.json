@@ -2,18 +2,14 @@
   "name": "ohhzaz-by-siham",
   "version": "1.0.0",
   "description": "French and Arabic website for OHH ZAZ by SIHAM, Casablanca",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run build"
+    "check": "npm run typecheck && npm run build",
+    "test": "node scripts/check-indexing.mjs && node scripts/check-content.mjs && node scripts/check-security.mjs"
   },
-  "keywords": [],
   "author": "Naoufal Laamouri",
   "license": "UNLICENSED",
   "type": "module",
