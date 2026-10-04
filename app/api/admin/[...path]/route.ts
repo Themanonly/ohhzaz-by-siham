@@ -16,7 +16,7 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
  const path=(await params).path.join('/');const url=new URL(req.url);const mutation=req.method!=='GET';
  const origin=req.headers.get('origin');
  if(mutation&&!trustedOrigin(origin,req.url,process.env.SITE_URL))return json({error:'Origin rejected'},403);
- if(mutation&&path!=='uploads'&&path!=='auth/logout'&&!(req.headers.get('content-type')||'').startsWith('application/json'))return json({error:'JSON required'},415);
+ if(mutation&&path!=='uploads'&&path!=='auth/logout'&&req.method!=='DELETE'&&!(req.headers.get('content-type')||'').startsWith('application/json'))return json({error:'JSON required'},415);
  const db=database();const jar=await cookies();
  try{
  if(path==='auth/login'&&req.method==='POST'){
@@ -36,6 +36,16 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
   if(!['image/jpeg','image/png','image/webp'].includes(req.headers.get('content-type')||''))return json({error:'Unsupported image'},400);
   const input=await bytes(req,5*1024*1024);const output=await sharp(input,{limitInputPixels:40000000}).rotate().resize(1600,1600,{fit:'inside',withoutEnlargement:true}).webp({quality:84}).toBuffer();if(output.length>2*1024*1024)return json({error:'Image too large'},400);
   const id=randomUUID();await db.query('INSERT INTO salon_media(id,bytes,content_type) VALUES($1,$2,$3)',[id,output,'image/webp']);return json({url:'/api/media/'+id});
+ }
+ if(path==='reviews'){
+  if(staff.role!=='admin')return json({error:'Administrator required'},403);
+  if(req.method==='GET')return json((await db.query("SELECT id,name,rating,comment,locale,status,created_at FROM salon_reviews ORDER BY (status='pending') DESC,created_at DESC LIMIT 100")).rows);
+  if(req.method==='DELETE'){const id=url.searchParams.get('id');if(!id||!/^[0-9a-f-]{36}$/.test(id))return json({error:'Invalid ID'},400);await db.query('DELETE FROM salon_reviews WHERE id=$1',[id]);return json({ok:true})}
+  if(req.method!=='PATCH')return json({error:'Method not allowed'},405);
+  const b=JSON.parse((await bytes(req,1024)).toString());
+  if(!b||typeof b!=='object'||!['pending','published','hidden'].includes(b.status)||typeof b.id!=='string'||!/^[0-9a-f-]{36}$/.test(b.id))return json({error:'Invalid review'},400);
+  const result=await db.query('UPDATE salon_reviews SET status=$1 WHERE id=$2 RETURNING id,status',[b.status,b.id]);
+  return result.rowCount?json(result.rows[0]):json({error:'Not found'},404);
  }
  const tables=['products','product_categories','social_links','service_groups'];const table=path.startsWith('data/')?path.slice(5):'';if(!tables.includes(table))return json({error:'Not found'},404);
  if(table==='social_links'&&mutation&&staff.role!=='admin')return json({error:'Administrator required'},403);

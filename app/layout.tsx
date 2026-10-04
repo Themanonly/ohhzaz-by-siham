@@ -11,3 +11,5 @@ export default async function Layout({children}: {children: React.ReactNode}) { 
 import './release.css';
 import './finishing.css';
 import './footer.css';
+
+import './reviews.css';

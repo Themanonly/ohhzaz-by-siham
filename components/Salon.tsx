@@ -5,6 +5,7 @@ import ContactAction,{ContactsContext} from './ContactAction';
 import {products,productCategories,socialLinks,type Product,type ProductCategory,type SocialLink} from '../data/catalogue';
 import {copy} from '../data/copy';
 import Footer from './Footer';
+import Reviews from './Reviews';
 import SiteInformation from './SiteInformation';
 import {business} from '../data/business';
 import VideoHero from './VideoHero';
@@ -31,6 +32,7 @@ return <ContactsContext.Provider value={contacts}><a className="skip" href="#mai
 {(page===''||page==='le-salon')&&<SalonInterior locale={locale} full={page==='le-salon'}/>}
 {page==='contact'&&<section className="contact section page-start" data-scroll-key="contact"><p className="eyebrow">OHH ZAZ · BY SIHAM</p><h1>{t.contactTitle}</h1><p>{t.contactBody}</p><div className="contact-platforms"><ContactAction platform="whatsapp" locale={locale} className="button">WhatsApp</ContactAction><ContactAction platform="instagram" locale={locale}>Instagram</ContactAction><ContactAction platform="tiktok" locale={locale}>TikTok</ContactAction></div><div className="contact-location"><MapPin/><span dir="ltr">n°24, Bd Sidi Mohamed Ben Abdellah<br/>Casablanca 20330</span></div><a className="text-link directions-link" href={business.mapUrl} target="_blank" rel="noopener noreferrer">{ar?'الاتجاهات إلى الصالون':'Itinéraire vers le salon'}<ArrowUpRight size={16}/></a><OpeningHours locale={locale}/></section>}
 {(page==='contact'||page==='mariee')&&<section className="section faq" data-scroll-key="faq"><p className="eyebrow">{t.faq}</p>{t.questions.map((q,i)=>(page==='mariee'&&i!==1)?null:<div className="faq-item" key={q}><button onClick={()=>setFaq(faq===i?null:i)} aria-expanded={faq===i} aria-controls={`faq-${i}`}>{q}{faq===i?<Minus size={18}/>:<Plus size={18}/>}</button><div id={`faq-${i}`} hidden={faq!==i}><p>{t.answers[i]}</p></div></div>)}</section>}
+{(page===''||page==='le-salon')&&<Reviews locale={locale}/>}
 {page==='mentions-legales'&&<SiteInformation locale={locale}/>}</main><Footer locale={locale} page={page}/></ContactsContext.Provider>}
 
 
