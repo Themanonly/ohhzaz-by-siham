@@ -13,3 +13,5 @@ import './finishing.css';
 import './footer.css';
 
 import './reviews.css';
+
+import './mobile-hero.css';
