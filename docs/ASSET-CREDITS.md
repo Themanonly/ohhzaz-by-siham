@@ -14,7 +14,7 @@ Bridal portrait uses the owner-supplied upscaled photo in responsive sizes. brid
 - Makeup: Djordje Cvetkovic, https://www.pexels.com/photo/makeup-of-bride-19730652/ -> bridal-makeup-stock.webp.
 - Details: Jonathan Borba, https://www.pexels.com/photo/close-up-of-a-bride-putting-on-earrings-18618533/ -> bridal-details-stock.webp.
 - License: https://www.pexels.com/license/ (consulted 20 September 2026).
-Both are labelled inspiration, outside the salon's own work, in French and Arabic. No implication that the models endorse the salon.
+The public bridal board uses the concise label “Inspiration mariée” in French and Arabic; source credits are maintained here. No claim of model endorsement.
 
 ## Future products
 Product forms are original CSS illustrations. They are explicitly placeholders, with no invented brand partnerships, references, stock, prices, ratings, checkout or purchase controls.
@@ -41,4 +41,16 @@ Locally optimized WebP and thumbnail derivatives. Commercial-use license: https:
 | teinture-sourcils | https://www.pexels.com/photo/woman-at-beautician-17282792/ |
 
 ## Bridal film
-Owner-supplied ohh_zaz_1779466562_3902770728921105333_44080976396.mp4. Portrait dimensions preserved at 576×1024; web encode has no audio. Poster is the couple portrait at approximately 31 seconds. Source file unchanged.
+Owner-supplied ohh_zaz_1779466562_3902770728921105333_44080976396.mp4. Portrait dimensions preserved at 576×1024. Original H.264 video retained; original source audio converted to browser-compatible AAC-LC stereo (44.1 kHz). Sound begins only after visitor-initiated playback, with a mute toggle. Poster is the couple portrait at approximately 31 seconds. Source file unchanged.
+
+
+## October 2026 visual refresh
+License checked 8 October 2026: https://www.pexels.com/license/ . Images are treatment illustrations/inspiration, not endorsements. No claim that these photographs were shot in 2026.
+
+| Current asset | Photographer / source |
+|---|---|
+| services/maquillage.webp and -thumb.webp | Xhemi Photo, https://www.pexels.com/photo/person-putting-lipstick-on-woman-s-lips-15046692/ |
+| services/chignon.webp and -thumb.webp; bridal-modern-updo.webp | Anna Malysheva, Pexels photo 12471823: https://www.pexels.com/photo/12471823/ |
+| bridal-modern-makeup.webp | alirezamani wedding team, Pexels photo 38765825: https://www.pexels.com/photo/38765825/ |
+
+Image CDN source format: https://images.pexels.com/photos/PHOTO_ID/pexels-photo-PHOTO_ID.jpeg . High-quality 1600 px downloads retained in ignored work/stock-scout, optimized to 1200 px WebP and small service thumbnails. Prior makeup (6713329) and chignon (36648211) entries above are superseded. The details photograph by Jonathan Borba remains in use. Owner-supplied salon/client imagery beneath the bridal film is preserved.

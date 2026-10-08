@@ -1,0 +1,51 @@
+.bridal-player-controls.bridal-player-audio {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px 44px;
+  gap: 0 6px;
+  padding: 7px 2px 0;
+}
+
+.bridal-player-audio .bridal-film-seek {
+  grid-column: 1 / -1;
+  margin: 0;
+  height: 28px;
+}
+
+.bridal-time-pair {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #ede1cc;
+}
+
+.bridal-time-pair > span {
+  opacity: .4;
+  font-size: 11px;
+}
+
+.bridal-player-audio .bridal-sound-toggle {
+  color: #f2d4a5;
+  background: #d5b88a14;
+  border: 1px solid #d5b88a30;
+}
+
+.bridal-player-audio .bridal-sound-toggle[data-muted="true"] {
+  color: #c6b6a2;
+  background: transparent;
+  border-color: transparent;
+}
+
+.bridal-player-audio button:focus-visible,
+.bridal-player-audio input:focus-visible {
+  outline: 2px solid #eed8b2;
+  outline-offset: 3px;
+}
+
+.bridal-film-frame:fullscreen .bridal-screen {
+  max-height: calc(100svh - 148px);
+}
+
+@media (max-width: 360px) {
+  .bridal-player-controls.bridal-player-audio { gap: 0 2px; }
+  .bridal-time-pair { gap: 4px; }
+}

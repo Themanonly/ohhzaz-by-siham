@@ -15,3 +15,6 @@ import './footer.css';
 import './reviews.css';
 
 import './mobile-hero.css';
+import './bridal-refinement.css';
+import './bridal-audio.css';
+import './catalogue-refinement.css';

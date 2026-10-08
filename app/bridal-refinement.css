@@ -1,0 +1,43 @@
+/* A browsable bridal moodboard, with one clear composition at a time. */
+.bridal-album .album-heading{column-gap:8%;margin-bottom:34px}
+.bridal-album .album-layout{display:block}
+.bridal-album .album-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-bottom:38px}
+.bridal-album .album-choices>button{position:relative;display:block;padding:0;overflow:hidden;border:1px solid #b59b774f;border-radius:6px;background:#f8f2e8;min-width:0;color:#4c3929;transition:border-color .25s,box-shadow .25s}
+.bridal-album .album-choices>button>img{display:block;width:100%;height:165px;object-fit:cover;object-position:center 36%;opacity:.76;transition:opacity .35s,transform .6s}
+.bridal-album .album-choices>button:hover>img,.bridal-album .album-choices>button[aria-selected=true]>img{opacity:1;transform:scale(1.025)}
+.bridal-album .album-choices>button[aria-selected=true]{border-color:#806340;box-shadow:0 7px 20px #60422312}
+.bridal-album .album-choices>button:focus-visible{outline:2px solid #806340;outline-offset:5px}
+.bridal-album .album-choice-label{position:relative;display:flex;align-items:center;gap:15px;padding:16px 20px;background:#f8f2e8;font-family:var(--serif);font-size:26px;line-height:1.1}
+.album-choice-label small{font-family:var(--sans);font-size:10px;letter-spacing:1px;color:#927650}
+.album-choice-label>span{flex:1}
+.bridal-album .album-choices>button .album-choice-label svg{opacity:.4;transform:none;flex-shrink:0}
+.bridal-album .album-choices>button[aria-selected=true] .album-choice-label svg{opacity:1}
+.bridal-album .album-panel{grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:clamp(28px,6vw,90px);padding:32px;background:linear-gradient(120deg,#fffaf1d9,#e5d1bd33);border:1px solid #baa17c4f;border-radius:8px 70px 8px 8px}
+.bridal-album .album-panel figure{min-width:0}
+.bridal-album .album-panel figure>img{height:520px;border-radius:4px 44px 4px 4px;object-position:center 34%}
+.bridal-album .album-panel figure>figcaption{display:flex;justify-content:space-between;gap:12px;font-size:9px;letter-spacing:1.6px;margin-top:14px}
+.bridal-album .album-story{max-width:380px;padding-inline-end:18px}
+.bridal-album .album-story h3{font-size:clamp(35px,3.6vw,56px);line-height:1.04;text-wrap:balance}
+.bridal-album .album-story>p{font-size:15px;line-height:1.9;margin:26px 0}
+.bridal-album .album-story .text-link{font-size:12px;min-height:44px}
+[dir=rtl] .bridal-album .album-choice-label{font-size:25px}
+[dir=rtl] .bridal-album .album-story h3{line-height:1.4}
+[dir=rtl] .bridal-album .album-story>p{font-size:19px}
+[dir=rtl] .bridal-album .album-story .text-link{font-size:16px}
+@media(max-width:760px){
+ .bridal-album .album-choices{gap:9px;margin-bottom:20px}
+ .bridal-album .album-choices>button{min-height:0}
+ .bridal-album .album-choices>button>img{height:110px}
+ .bridal-album .album-choice-label{gap:4px;padding:12px 6px;font-size:17px;justify-content:center;text-align:center}
+ .bridal-album .album-choice-label small,.bridal-album .album-choice-label svg{display:none}
+ .bridal-album .album-panel{grid-template-columns:1fr;gap:22px;padding:14px;border-radius:6px 35px 6px 6px}
+ .bridal-album .album-panel figure>img{height:auto;aspect-ratio:4/5;max-height:440px;border-radius:3px 24px 3px 3px}
+ .bridal-album .album-panel figure>figcaption{font-size:8px;letter-spacing:1px;margin-top:12px}
+ .bridal-album .album-story{padding:5px 8px 10px;max-width:none}
+ .bridal-album .album-story>.bridal-spark{width:23px;height:23px;margin-bottom:13px}
+ .bridal-album .album-story h3{font-size:34px}
+ .bridal-album .album-story>p{font-size:13px;margin:16px 0}
+ [dir=rtl] .bridal-album .album-choice-label{font-size:18px}
+ [dir=rtl] .bridal-album .album-story>p{font-size:17px}
+}
+@media(prefers-reduced-motion:reduce){.bridal-album .album-choices>button,.bridal-album .album-choices>button>img{transition:none;transform:none!important}}
