@@ -15,12 +15,12 @@ Checks: `node scripts/check-content.mjs`, `npm run check`, `node scripts/check-p
 - Instagram, TikTok and WhatsApp; multiple accounts open a chooser. Source credits are in docs/ASSET-CREDITS.md.
 
 ## Admin
-/admin uses server-side PostgreSQL on Railway, with verified TLS and HttpOnly session cookies. The database schema and initial content are provisioned. Account activation and deployment status are recorded in docs/RAILWAY-HANDOFF.md.
+/admin uses the dedicated OHH ZAZ Supabase PostgreSQL project with verified TLS, a restricted server role and HttpOnly session cookies. All ten application tables were transferred and compared against the original using row counts and SHA-256 checksums. Follow docs/SUPABASE-MIGRATION.md for the evidence; older handoffs are historical records.
 Full admin manages products, categories, services and contact accounts. Manager manages products, categories and services. This is a content administration panel, not a visual page/layout editor.
 Read docs/ADMIN-SETUP.md before enabling it. DATABASE_URL is a server-only secret; never expose it through NEXT_PUBLIC variables.
 
 ## Deployment
-Follow docs/DEPLOYMENT.md. Current production origin: https://ohhzaz.com, hosted by the existing Netlify project, with Cloudflare DNS and Railway PostgreSQL.
+Follow docs/DEPLOYMENT.md. Production origin: https://ohhzaz.com, hosted by the existing Netlify project with Cloudflare DNS. Runtime connections accept Supabase endpoints only. The migration result separately records deployed cutover verification.
 Only French and Arabic pages are published. The sitemap includes their alternate-language links; English and Darija routes are intentionally absent.
 Indexing requires explicit SITE_INDEXABLE=true and an HTTPS origin; Netlify preview contexts always disable it. The normalized origin and indexing decision are embedded at build time so page metadata, sitemap and robots remain consistent. Changing these settings requires a rebuild.
 Use the Next.js integration, not a generic SPA redirect or static export.

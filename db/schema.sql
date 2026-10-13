@@ -7,7 +7,10 @@ CREATE TABLE IF NOT EXISTS products(id text PRIMARY KEY, category_id text NOT NU
 CREATE TABLE IF NOT EXISTS social_links(id text PRIMARY KEY, platform text NOT NULL CHECK(platform IN ('instagram','tiktok','whatsapp')), url text NOT NULL, created_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS service_groups(id text PRIMARY KEY, fr text NOT NULL, ar text NOT NULL, items jsonb NOT NULL CHECK(jsonb_typeof(items)='array'), created_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS salon_media(id uuid PRIMARY KEY, bytes bytea NOT NULL, content_type text NOT NULL, created_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS products_published_media ON products(image) WHERE status='published';
+CREATE INDEX IF NOT EXISTS products_published_date ON products(created_at DESC) WHERE status='published';
 CREATE INDEX IF NOT EXISTS salon_sessions_expiry ON salon_sessions(expires_at);
+CREATE INDEX IF NOT EXISTS salon_sessions_user ON salon_sessions(user_id);
 CREATE TABLE IF NOT EXISTS salon_reviews (
  id uuid PRIMARY KEY, name text NOT NULL CHECK(char_length(name) BETWEEN 2 AND 60),
  rating integer NOT NULL CHECK(rating BETWEEN 1 AND 5),

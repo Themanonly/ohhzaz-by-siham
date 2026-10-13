@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import {useState, useRef, useEffect} from 'react';
-import {ArrowUpRight, Search, X, Wind, Sparkles, Brush, Droplets, ChevronDown} from 'lucide-react';
+import {ArrowUpRight, Search, X, Wind, Sparkles, Brush, Droplets, ChevronDown,ZoomIn,ZoomOut} from 'lucide-react';
 import {products as defaults, productCategories as defaultCategories, type Product, type ProductCategory} from '../data/catalogue';
 import ContactAction from './ContactAction';
 
@@ -20,10 +20,16 @@ export default function Products({locale, teaser=false, items=defaults, categori
   const [category, setCategory] = useState('all');
   const [sort, setSort] = useState('featured');
   const [selected, setSelected] = useState<Product|null>(null);
+  const [expandedImage,setExpandedImage]=useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
+  const zoomButton=useRef<HTMLButtonElement>(null);
+  const returnButton=useRef<HTMLButtonElement>(null);
+  const wasExpanded=useRef(false);
+  useEffect(()=>{if(expandedImage)returnButton.current?.focus();else if(wasExpanded.current)zoomButton.current?.focus();wasExpanded.current=expandedImage;},[expandedImage]);
 
   useEffect(() => {
     if (!selected) return;
+    setExpandedImage(false);
     const element = dialog.current;
     element?.showModal();
     const prior = document.body.style.overflow;
@@ -53,7 +59,7 @@ export default function Products({locale, teaser=false, items=defaults, categori
   const art = (product:Product, detail=false) => {
     const Icon = product.category_id === 'appareils' ? Wind : product.category_id === 'brosses' ? Brush : product.category_id === 'cheveux' ? Droplets : Sparkles;
     return product.image
-      ? <img src={product.image} alt={name(product)} width="600" height="600" loading={detail ? 'eager' : 'lazy'} decoding="async"/>
+      ? <img src={product.image} srcSet={product.image.startsWith('/api/media/')?`${product.image}?w=320 320w, ${product.image}?w=640 640w, ${product.image}?w=960 960w, ${product.image}?w=1600 1600w`:undefined} sizes={detail?(expandedImage?'90vw':'(max-width: 600px) 94vw, 520px'):'(max-width: 600px) 88vw, (max-width: 1000px) 44vw, 425px'} alt={name(product)} width="600" height="600" loading={detail ? 'eager' : 'lazy'} decoding="async"/>
       : <div className="catalogue-placeholder" aria-hidden="true"><Icon strokeWidth={.8}/><span>OHH ZAZ</span></div>;
   };
   const description = selected?.description?.[locale] || selected?.description?.fr || '';
@@ -90,10 +96,10 @@ export default function Products({locale, teaser=false, items=defaults, categori
 
       <dialog className="product-dialog product-dialog-refined" ref={dialog} aria-labelledby={selected ? 'product-detail-title' : undefined} onCancel={() => setSelected(null)} onClick={event => {if (event.target === event.currentTarget) setSelected(null);}}>
         {selected && <>
-          <div className="product-dialog-header"><span>OHH ZAZ <span aria-hidden="true">/</span> {ar ? 'اختيار الصالون' : 'La sélection'}</span><button type="button" className="dialog-close" onClick={() => setSelected(null)} aria-label={ar ? 'إغلاق' : 'Fermer'} autoFocus><X/></button></div>
-          <div className="product-dialog-body">
-            <div className="product-dialog-image">{art(selected, true)}</div>
-            <div className="product-dialog-copy">
+          <div className="product-dialog-header">{expandedImage?<button type="button" ref={returnButton} className="product-image-return" onClick={()=>setExpandedImage(false)}><ZoomOut size={17}/>{ar?'الرجوع إلى المنتج':'Retour au produit'}</button>:<span>OHH ZAZ <span aria-hidden="true">/</span> {ar ? 'اختيار الصالون' : 'La sélection'}</span>}<button type="button" className="dialog-close" onClick={() => setSelected(null)} aria-label={ar ? 'إغلاق' : 'Fermer'} autoFocus><X/></button></div>
+          <div className={`product-dialog-body${expandedImage?' is-image-expanded':''}`}>
+            <div className="product-dialog-image">{art(selected, true)}{selected.image&&!expandedImage&&<button type="button" ref={zoomButton} className="product-image-zoom" onClick={()=>setExpandedImage(true)}><ZoomIn size={17}/><span>{ar?'تكبير الصورة':'Agrandir la photo'}</span></button>}</div>
+            <div className="product-dialog-copy" hidden={expandedImage}>
               <p className="eyebrow">{selected.status === 'placeholder' ? (ar ? 'قريباً' : 'PROCHAINEMENT') : categoryName(selected)}</p>
               <h2 id="product-detail-title">{name(selected)}</h2>
               <p className="product-detail-price"><bdi>{price(selected)}</bdi></p>

@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import {categories as defaultServices,type Category} from '../data/services';
 import ContactAction,{ContactsContext} from './ContactAction';
 import {products,productCategories,socialLinks,type Product,type ProductCategory,type SocialLink} from '../data/catalogue';
@@ -21,7 +20,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { ArrowUpRight, MapPin, Plus, Minus } from 'lucide-react';
 type Locale='fr'|'ar';
 function Star({className=''}:{className?:string}){return <svg className={className} viewBox="0 0 40 40" aria-hidden="true"><path d="M20 0C22 14 26 18 40 20C26 22 22 26 20 40C18 26 14 22 0 20C14 18 18 14 20 0Z" fill="currentColor"/></svg>}
-export default function Salon({locale,page,items=products,categories=productCategories,contacts=socialLinks,serviceGroups=defaultServices}:{locale:Locale;page:string;items?:Product[];categories?:ProductCategory[];contacts?:SocialLink[];serviceGroups?:Category[]}){useEffect(()=>{let restoring=false;try{restoring=!!sessionStorage.getItem('ohhzaz-language-position')}catch{}if(!location.hash&&!restoring)window.scrollTo({top:0,behavior:'instant'})},[page]);const t=copy[locale],ar=locale==='ar';const [faq,setFaq]=useState<number|null>(null);useEffect(()=>{document.documentElement.lang=locale;document.documentElement.dir=ar?'rtl':'ltr';},[locale,ar]);const url=(p='')=>`/${locale}${p?'/'+p:''}`;
+export default function Salon({locale,page,items=products,categories=productCategories,contacts=socialLinks,serviceGroups=defaultServices}:{locale:Locale;page:string;items?:Product[];categories?:ProductCategory[];contacts?:SocialLink[];serviceGroups?:Category[]}){useEffect(()=>{let restoring=false;try{restoring=!!sessionStorage.getItem('ohhzaz-language-position')}catch{}if(!location.hash&&!restoring)window.scrollTo({top:0,behavior:'instant'})},[page]);const t=copy[locale],ar=locale==='ar';const [faq,setFaq]=useState<number|null>(null);useEffect(()=>{document.documentElement.lang=locale;document.documentElement.dir=ar?'rtl':'ltr';},[locale,ar]);
 return <ContactsContext.Provider value={contacts}><a className="skip" href="#main">{ar?'إلى المحتوى':'Aller au contenu'}</a><Header locale={locale} page={page}/>
 <main id="main" tabIndex={-1}>{!page&&<><VideoHero locale={locale}/><section className="intro section" id="maison" data-scroll-key="maison"><Star/><p className="eyebrow">{t.note}</p><h2>{t.welcome}</h2><p>{t.body}</p><span className="signature">Siham</span></section></>}
 {(page===''||page==='prestations')&&<ServiceDiscovery categories={serviceGroups} locale={locale} compact={page==='prestations'}/>}

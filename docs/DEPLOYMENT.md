@@ -1,6 +1,6 @@
 # Deployment and operations
 
-Production: https://ohhzaz.com. Existing Netlify project: ohhzaz-by-siham. Cloudflare supplies DNS; Railway supplies PostgreSQL. Do not create replacement projects or move credentials into source control.
+Production: https://ohhzaz.com. Existing Netlify project: ohhzaz-by-siham. Cloudflare supplies DNS; the database is the dedicated OHH ZAZ Supabase project. See SUPABASE-MIGRATION.md for verified transfer evidence. Never move credentials into source control.
 
 ## Release
 1. Review the source diff and preserve unrelated work. Run `npm ci`, `npm test`, and `npm run typecheck`.
@@ -21,6 +21,6 @@ The sitemap contains the seven public routes in French and Arabic (14 URLs), wit
 LICENSE covers original work by OHH ZAZ by SIHAM and Naoufal Laamouri; third-party materials retain their licenses. These notices are not a government copyright or trademark registration. Publication permissions for supplied client media remain the owner's responsibility.
 
 ## Recovery and maintenance
-Use a previous successful Netlify deploy to roll back application code. Do not roll back database content by applying an old schema. Verify Railway backup availability and restoration procedures in the account before relying on a recovery claim; source control is not a database backup. Keep credentials private, rotate them through provider controls if compromised, and update dependent server secrets together. Database certificate verification must remain enabled.
+Use a previous successful Netlify deploy to roll back application code only when it supports the current backend. Do not roll back database content by applying an old schema. Verify Supabase backup availability and test restoration before relying on a recovery claim; source control is not a database backup. Keep credentials private, rotate them if compromised, and update dependent server secrets together. Database certificate verification must remain enabled. The original source service is retained temporarily for recovery without any website runtime connection; permanent provider deletion is a separate owner decision.
 
 Orders, online payments and automatic appointment confirmation are not implemented. Product previews are explicitly labelled; publish only genuine inventory through the admin.

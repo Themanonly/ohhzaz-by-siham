@@ -43,6 +43,9 @@ Locally optimized WebP and thumbnail derivatives. Commercial-use license: https:
 ## Bridal film
 Owner-supplied ohh_zaz_1779466562_3902770728921105333_44080976396.mp4. Portrait dimensions preserved at 576×1024. Original H.264 video retained; original source audio converted to browser-compatible AAC-LC stereo (44.1 kHz). Sound begins only after visitor-initiated playback, with a mute toggle. Poster is the couple portrait at approximately 31 seconds. Source file unchanged.
 
+## Mobile salon film, 13 October 2026
+salon-film-mobile.mp4 is a 960 px wide H.264 rendition of the same owner-supplied salon tour, with fast-start metadata. It preserves the whole film and aspect ratio. Desktop continues to use salon-film.mp4. Superseded bridal-makeup-stock.webp has been removed from deployed assets; its attribution above is retained as historical provenance.
+
 
 ## October 2026 visual refresh
 License checked 8 October 2026: https://www.pexels.com/license/ . Images are treatment illustrations/inspiration, not endorsements. No claim that these photographs were shot in 2026.

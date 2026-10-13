@@ -7,6 +7,7 @@ import {contactIdentity,contactHref} from '../../../../lib/contacts';
 import {validServices} from '../../../../lib/catalogue-validation';
 import {trustedOrigin} from '../../../../lib/request-security';
 import type {SocialLink} from '../../../../data/catalogue';
+import {invalidateCatalogue} from '../../../../lib/catalogue-server';
 export const runtime='nodejs';
 const COOKIE='ohhzaz_session';
 const json=(v:unknown,status=200)=>Response.json(v,{status,headers:{'Cache-Control':'no-store'}});
@@ -51,7 +52,14 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
  if(table==='social_links'&&mutation&&staff.role!=='admin')return json({error:'Administrator required'},403);
  if(req.method==='GET'){const result=await db.query(`SELECT * FROM ${table} ORDER BY created_at DESC`);return json(result.rows.map(r=>table==='products'?{...r,price:Number(r.price)}:r));}
  const id=url.searchParams.get('id')?.replace(/^eq\./,'');
- if(req.method==='DELETE'){if(table!=='social_links'||!id)return json({error:'Unsupported deletion'},400);await db.query('DELETE FROM social_links WHERE id=$1',[id]);return json({ok:true});}
+ if(req.method==='DELETE'){
+  if(!id||id.length>160||!['social_links','products'].includes(table))return json({error:'Unsupported deletion'},400);
+  if(table==='products'){
+   const result=await db.query("DELETE FROM products WHERE id=$1 AND status='draft' RETURNING id",[id]);
+   if(!result.rowCount)return json({error:'Only an existing draft can be deleted'},409);
+  }else await db.query('DELETE FROM social_links WHERE id=$1',[id]);
+  invalidateCatalogue();return json({ok:true});
+ }
  if(!['POST','PATCH'].includes(req.method))return json({error:'Method not allowed'},405);
  const b=JSON.parse((await bytes(req,100000)).toString());if(!b||typeof b!=='object'||Array.isArray(b))return json({error:'Invalid request'},400);const loc=(v:unknown)=>!!v&&typeof v==='object'&&['fr','ar'].every(l=>typeof (v as Record<string,unknown>)[l]==='string'&&String((v as Record<string,unknown>)[l]).trim().length>0&&String((v as Record<string,unknown>)[l]).length<=160);
  let values:Record<string,unknown>;
@@ -66,6 +74,7 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
  const fields=Object.keys(values);const args=Object.values(values);let result;
  if(req.method==='PATCH'){if(!id)return json({error:'Missing ID'},400);result=await db.query(`UPDATE ${table} SET ${fields.map((f,i)=>`${f}=$${i+1}`).join(',')} WHERE id=$${args.length+1} RETURNING *`,[...args,id]);}
  else{const recordId=table==='service_groups'?b.id:randomUUID();result=await db.query(`INSERT INTO ${table}(id,${fields.join(',')}) VALUES($1,${fields.map((_,i)=>'$'+(i+2)).join(',')}) ${table==='service_groups'?`ON CONFLICT(id) DO UPDATE SET ${fields.map(f=>`${f}=EXCLUDED.${f}`).join(',')}`:''} RETURNING *`,[recordId,...args]);}
+ if(result.rowCount)invalidateCatalogue();
  return json(result.rows);
  }catch(e){const code=(e as {code?:string}).code;if(code==='23503'||code==='23505')return json({error:'Conflict'},409);if(e instanceof SyntaxError||e instanceof Error&&e.message==='size')return json({error:'Invalid request'},400);console.error('Admin request failed',code||'request');return json({error:'Request failed'},500);}
 }

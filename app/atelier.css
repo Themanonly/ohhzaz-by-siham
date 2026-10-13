@@ -151,7 +151,6 @@ main{background:transparent}
 .price-menu{background:linear-gradient(180deg,transparent,#fffaf0bd 12%,#fffaf0bd 85%,transparent)}
 .discovery-extras>a{background:#f9f1e58a;backdrop-filter:blur(2px)}
 .preparation-card{background:linear-gradient(135deg,#fffbf2dd,#f2e6d3b3)}
-.album-panel img[src*="bridal-makeup-stock"]{object-position:50% 64%}
 .album-panel img[src*="bridal-details-stock"]{object-position:50% 38%}
 .album-panel figure>figcaption{font-size:8px;line-height:1.7;letter-spacing:1px}
 .interior-main-photo{aspect-ratio:1.6;max-height:none}

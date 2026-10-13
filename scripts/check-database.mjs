@@ -14,7 +14,8 @@ const password=randomBytes(24).toString('hex');
 let categoryId, productId, mediaId, server;
 const request=(path,method='GET',body,cookie,origin=base)=>fetch(base+'/api/admin/'+path,{method,headers:{Origin:origin,...(cookie?{Cookie:cookie}:{}),...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined});
 try {
-  assert.equal((await db.query('SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()')).rows[0].ssl,true);
+  const connection=await db.connect();
+  try{assert.equal(connection.connection.stream.encrypted,true);assert.equal(connection.connection.stream.authorized,true);}finally{connection.release();}
   const legacySalt=randomBytes(16).toString('hex');
   const legacyHash=legacySalt+':'+scryptSync(password,legacySalt,64,{N:16384,r:8,p:1}).toString('hex');
   for(let i=0;i<2;i++) await db.query('INSERT INTO salon_staff(id,email,password_hash,role) VALUES($1,$2,$3,$4)',[ids[i],emails[i],i?passwordHash(password):legacyHash,i?'manager':'admin']);
@@ -45,11 +46,21 @@ try {
   assert.equal((await request('data/products','POST',{...product,image:'/api/media/'+randomUUID()},manager)).status,400);
   const createdProduct=await request('data/products','POST',product,manager);assert.equal(createdProduct.status,200);productId=(await createdProduct.json())[0].id;
   assert.equal((await fetch(base+mediaUrl)).status,200);
+  const variant=await fetch(base+mediaUrl+'?w=320');assert.equal(variant.status,200);assert.equal(variant.headers.get('content-type'),'image/webp');
+  const tag=variant.headers.get('etag');assert.ok(tag);
+  assert.equal((await fetch(base+mediaUrl+'?w=320',{headers:{'If-None-Match':tag}})).status,304);
+  assert.equal((await fetch(base+mediaUrl+'?w=50000')).status,400);
+  assert.equal((await request('data/products?id='+productId,'DELETE',undefined,manager)).status,409);
   assert.equal((await request('data/products?id='+productId,'PATCH',{...product,status:'draft'},manager)).status,200);
   assert.equal((await fetch(base+mediaUrl)).status,404);
+  assert.equal((await fetch(base+mediaUrl+'?w=320',{headers:{'If-None-Match':tag}})).status,404);
+  assert.equal((await request('data/products?id='+productId,'DELETE')).status,401);
+  assert.equal((await request('data/products?id='+productId,'DELETE',undefined,manager)).status,200);
+  assert.equal((await db.query('SELECT 1 FROM products WHERE id=$1',[productId])).rowCount,0);
+  assert.equal((await request('data/products?id='+productId,'DELETE',undefined,manager)).status,409);
   assert.equal((await request('auth/logout','POST',undefined,manager)).status,200);
   assert.equal((await request('data/products','GET',undefined,manager)).status,401);
-  console.log('PASS: verified TLS, password upgrade and repeat login, anonymous denial, CSRF, secure cookies, roles, persistent manager write, staff isolation, upload visibility, unpublishing and logout.');
+  console.log('PASS: TLS, password upgrade, CSRF, secure cookies, roles, writes, staff isolation, image variants and ETags, immediate draft privacy, draft deletion and logout.');
 } finally {
   if(server)server.kill();
   if(productId)await db.query('DELETE FROM products WHERE id=$1',[productId]);

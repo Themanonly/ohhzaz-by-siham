@@ -1,0 +1,59 @@
+{
+  "completedAt": "2026-10-13T22:22:56.856Z",
+  "tables": [
+    {
+      "table": "salon_staff",
+      "rows": 1,
+      "sha256": "3346f2362329760c81f6f3e236fec0be305b7148587e2ea7c227c8fbc723c92e"
+    },
+    {
+      "table": "salon_sessions",
+      "rows": 1,
+      "sha256": "f3731cd832e08f27e6e695f18d2044ecf7b7015a6f473b8fab58afb64bc9e1e1"
+    },
+    {
+      "table": "salon_login_limits",
+      "rows": 3,
+      "sha256": "73bf1e04be772b5afe1f3dc20e65d73facc95e837b06258a4d7c093a1d85bbbd"
+    },
+    {
+      "table": "product_categories",
+      "rows": 4,
+      "sha256": "9c9c611ad57721ef68985d2293474c3841a8e86849bf0d54bd4b5d6f3f009f53"
+    },
+    {
+      "table": "salon_media",
+      "rows": 3,
+      "sha256": "d702f2692060048a94eb19072a5b28247e15bc6d9e912414fe30ff40209fe42e"
+    },
+    {
+      "table": "products",
+      "rows": 3,
+      "sha256": "2efdcaba935a86606f10d93cb070d0e7442823ccb79bedd6bd5df5188851b883"
+    },
+    {
+      "table": "social_links",
+      "rows": 3,
+      "sha256": "7e5e2134be145e1ab1a9c18cb244b9fbe4b14468ae27587e06ef6467bdb9a6b8"
+    },
+    {
+      "table": "service_groups",
+      "rows": 5,
+      "sha256": "d7271bf896c77ef9eb18fd6568cfcfbf03b2af47b26a52ad92ece9c1a7f11b8c"
+    },
+    {
+      "table": "salon_reviews",
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "table": "salon_review_limits",
+      "rows": 1,
+      "sha256": "ba99ea367d95cce48dd3b23248100b535842a17583f98ab483b5852cc185e963"
+    }
+  ],
+  "verifiedTls": true,
+  "restrictedRuntime": true,
+  "sourcePreserved": true,
+  "liveCutoverPending": true
+}
