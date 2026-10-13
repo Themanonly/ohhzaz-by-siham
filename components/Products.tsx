@@ -41,6 +41,7 @@ export default function Products({locale, teaser=false, items=defaults, categori
   }, [selected]);
 
   const name = (product:Product) => product.name[locale] || product.name.fr;
+  const displayName = (product:Product) => ar ? name(product).split(/(\([A-Za-z][^)]*\)|[A-Za-z][A-Za-z0-9]*(?:\s+[A-Za-z0-9]+)*|\d+(?:[.,]\d+)*)/g).map((part,index)=>/^[A-Za-z0-9(]/.test(part)?<bdi dir="ltr" key={index}>{part}</bdi>:part) : name(product);
   const categoryName = (product:Product) => {
     const value = categories.find(entry => entry.id === product.category_id)?.name;
     return value?.[locale] || value?.fr;
@@ -90,7 +91,7 @@ export default function Products({locale, teaser=false, items=defaults, categori
       {visible.length ? <div className={`catalogue-grid${visible.length === 1 ? ' catalogue-grid--single' : ''}`}>
         {visible.map(product => <button type="button" className="catalogue-card" data-category={product.category_id} key={product.id} onClick={() => setSelected(product)} aria-haspopup="dialog" aria-label={`${ar ? 'تفاصيل' : 'Découvrir'} ${name(product)}`}>
           <div className="catalogue-image">{art(product)}{product.status === 'placeholder' && <span className="catalogue-badge">{ar ? 'قريباً' : 'PROCHAINEMENT'}</span>}<span className="catalogue-arrow"><ArrowUpRight aria-hidden="true"/></span></div>
-          <div className="catalogue-copy">{product.status !== 'placeholder' && <p className="catalogue-category">{categoryName(product)}</p>}<h2 title={name(product)}>{name(product)}</h2><p className="catalogue-price"><bdi>{price(product)}</bdi></p><span>{ar ? 'اكتشاف المنتج' : 'Voir le produit'}<ArrowUpRight size={15} aria-hidden="true"/></span></div>
+          <div className="catalogue-copy">{product.status !== 'placeholder' && <p className="catalogue-category">{categoryName(product)}</p>}<h2 title={name(product)}>{displayName(product)}</h2><p className="catalogue-price"><bdi>{price(product)}</bdi></p><span>{ar ? 'اكتشاف المنتج' : 'Voir le produit'}<ArrowUpRight size={15} aria-hidden="true"/></span></div>
         </button>)}
       </div> : <div className="catalogue-empty"><h2>{ar ? 'ما لقينا حتى نتيجة.' : 'Aucun résultat pour cette recherche.'}</h2><p>{ar ? 'جرّبي كلمة أخرى أو شوفي جميع الفئات.' : 'Essayez un autre mot ou parcourez toutes les catégories.'}</p><button className="button" onClick={clearFilters}>{ar ? 'مسح البحث' : 'Effacer les filtres'}</button></div>}
 
@@ -101,7 +102,7 @@ export default function Products({locale, teaser=false, items=defaults, categori
             <div className="product-dialog-image">{art(selected, true)}{selected.image&&!expandedImage&&<button type="button" ref={zoomButton} className="product-image-zoom" onClick={()=>setExpandedImage(true)}><ZoomIn size={17}/><span>{ar?'تكبير الصورة':'Agrandir la photo'}</span></button>}</div>
             <div className="product-dialog-copy" hidden={expandedImage}>
               <p className="eyebrow">{selected.status === 'placeholder' ? (ar ? 'قريباً' : 'PROCHAINEMENT') : categoryName(selected)}</p>
-              <h2 id="product-detail-title">{name(selected)}</h2>
+              <h2 id="product-detail-title">{displayName(selected)}</h2>
               <p className="product-detail-price"><bdi>{price(selected)}</bdi></p>
               {description ? <div className="product-description" key={selected.id}><p>{descriptionPreview(description)}</p>{description.length > 240 && <details><summary>{ar ? 'الوصف الكامل' : 'Description complète'}<ChevronDown size={16} aria-hidden="true"/></summary><p>{description}</p></details>}</div> : selected.status === 'placeholder' ? <p>{ar ? 'التشكيلة قيد التحضير.' : 'Notre sélection est en préparation.'}</p> : null}
             </div>

@@ -1,5 +1,5 @@
 {
-  "completedAt": "2026-10-13T22:22:56.856Z",
+  "completedAt": "2026-10-13T22:43:18.770Z",
   "tables": [
     {
       "table": "salon_staff",
@@ -55,5 +55,13 @@
   "verifiedTls": true,
   "restrictedRuntime": true,
   "sourcePreserved": true,
-  "liveCutoverPending": true
+  "liveCutoverPending": false,
+  "verifiedReleaseCommit": "b2145889b3b85ba86edf276ef392ad17012d92a2",
+  "productionChecks": {
+    "publicLocalizedRoutes": 14,
+    "mediaUrls": 40,
+    "anonymousAdminDenied": true,
+    "publishedResponsiveMedia": true,
+    "sourceComparedAfterDeploy": true
+  }
 }

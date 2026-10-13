@@ -8,6 +8,10 @@ Observed production response samples before the change: /fr first byte 3.24 seco
 
 Local production samples with public catalogue caching: /fr/produits 286 ms, next request 32 ms; /fr 27 ms. These are local diagnostic results, not a promised live-site timing or a like-for-like network benchmark.
 
+Post-cutover live samples from the same computer: /fr/produits first byte 1.21 seconds, next request 0.71 seconds; /fr 0.66 seconds. All returned 200. These are small diagnostic samples, not a Lighthouse score or a guaranteed timing for every visitor.
+
 The mobile salon film is 4,120,182 bytes versus 7,934,388 bytes for the original desktop rendition (about 48% less). The complete film/aspect ratio is retained; desktop uses the original rendition. The bridal film still waits for user playback before fetching, and keeps its audio controls.
 
 All ten application tables were transferred to Supabase and compared to a fresh source snapshot with row counts and SHA-256 checksums. Restricted-role, verified client TLS, session, CSRF, product writes, media privacy, published-product deletion rejection, draft deletion and logout checks passed. Temporary test products/categories/sessions were removed and the full comparison passed again. The old provider's runtime code/certificate and completed one-time transfer helpers were removed. A static certificate path avoids tracing unrelated project/private files into the server bundle. See SUPABASE-MIGRATION-RESULT.json for the separate deployment verification state. Older handoffs remain historical evidence.
+
+Netlify published b214588. Live checks passed for all 14 localized pages, 40 media URLs, configured indexing, ranges, unpublished media denial, anonymous admin/CSRF rejection and bounded responsive image/ETag behavior. Mobile French/Arabic product dialogs and desktop French were visually inspected; enlargement/return preserved complete artwork and the order action. A final polish isolates Latin model numbers in Arabic product titles to prevent reversed parentheses. Private transfer exports and temporary connection files are removed after verification; operational .env.local remains ignored.
