@@ -1,9 +1,10 @@
 'use client';
-import {useEffect,useState,type FormEvent} from 'react';
+import {useEffect,useRef,useState,type FormEvent} from 'react';
 import Link from 'next/link';
 import AdminReviews from './AdminReviews';
 import {ArrowUpRight,LogOut,Package,Layers,Scissors,Link2,ShieldCheck,Trash2} from 'lucide-react';
 import {AdminApiError,backend} from '../lib/admin-api';
+import {prepareProductPhoto,productFormErrors,type ProductErrors,type ProductField} from '../lib/product-form';
 import {contactIdentity} from '../lib/contacts';
 import {type Product,type ProductCategory,type SocialLink,type Platform} from '../data/catalogue';
 import {categories as initialServices,type Category} from '../data/services';
@@ -20,18 +21,89 @@ export default function AdminPanel({backendReady=false}:{backendReady?:boolean})
  const [checking,setChecking]=useState(backendReady);
  const [preview,setPreview]=useState('');
  const [discard,setDiscard]=useState<Product|null>(null);
+ const [productErrors,setProductErrors]=useState<ProductErrors>({});
+ const [productFeedback,setProductFeedback]=useState<{kind:'progress'|'error'|'success';text:string}|null>(null);
+ const productSaving=useRef(false),uploadedPhoto=useRef<{file:File;url:string}|null>(null);
+ const productForm=useRef<HTMLFormElement>(null);
+ const fieldError=(field:ProductField)=>productErrors[field]?<small id={'product-error-'+field} className="admin-field-error">{productErrors[field]}</small>:null;
+ const fieldProps=(field:ProductField)=>({'aria-invalid':!!productErrors[field],'aria-describedby':productErrors[field]?'product-error-'+field:undefined});
  const discardDraft=()=>{if(!session||!discard)return;const id=discard.id;void run(async()=>{await backend('/data/products?id=eq.'+encodeURIComponent(id),session.token,{method:'DELETE'});if(edit?.id===id)resetProduct();setDiscard(null);await load(session.token)},'Brouillon supprimé. Le produit ne figure plus dans votre catalogue.');};
  useEffect(()=>{if(!image){setPreview('');return;}const url=URL.createObjectURL(image);setPreview(url);return()=>URL.revokeObjectURL(url)},[image]);
  useEffect(()=>{if(!backendReady)return;let mounted=true;void backend('/auth/session',null).then(async result=>{await load('session');if(mounted)setSession({token:'session',role:result.role});}).catch(e=>{if(mounted&&!(e instanceof AdminApiError&&e.status===401))setNotice('Connexion au serveur indisponible. Rechargez la page pour réessayer.');}).finally(()=>{if(mounted)setChecking(false)});return()=>{mounted=false};},[backendReady]);
- const resetProduct=()=>{setUploadVersion(v=>v+1);setEdit(null);setName('');setNameAr('');setPrice('');setDescription('');setDescriptionAr('');setImage(null);setPublished(false);setCat('')};
- const openProduct=(p:Product)=>{setEdit(p);setName(p.name.fr);setNameAr(p.name.ar);setPrice(String(p.price??''));setDescription(p.description?.fr||'');setDescriptionAr(p.description?.ar||'');setImage(null);setPublished(p.status==='published');setCat(p.category_id);window.scrollTo({top:0,behavior:'smooth'})};
- const submitProduct=(e:FormEvent)=>{e.preventDefault();void run(async()=>{if(!session)return;let src=edit?.image;if(image){if(!['image/jpeg','image/png','image/webp'].includes(image.type)||image.size>5*1024*1024)throw new Error('Choisissez une image JPG, PNG ou WebP de moins de 5 Mo.');const uploaded=await backend('/uploads',session.token,{method:'POST',headers:{'Content-Type':image.type},body:image});src=uploaded.url;}if(!src)throw new Error('Ajoutez une photo du produit.');if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0||!price)throw new Error('Un nom et un prix valide sont requis.');await save('products',edit?.id||null,{name:{fr:name.trim(),ar:nameAr.trim()||name.trim()},price:Number(price),category_id:cat||cats[0]?.id,description:{fr:description.trim(),ar:descriptionAr.trim()},image:src,status:published?'published':'draft'});await load(session.token);resetProduct()})};
+ const resetProduct=()=>{uploadedPhoto.current=null;setProductErrors({});setUploadVersion(v=>v+1);setEdit(null);setName('');setNameAr('');setPrice('');setDescription('');setDescriptionAr('');setImage(null);setPublished(false);setCat('')};
+ const openProduct=(p:Product)=>{uploadedPhoto.current=null;setProductErrors({});setProductFeedback(null);setEdit(p);setName(p.name.fr);setNameAr(p.name.ar);setPrice(String(p.price??''));setDescription(p.description?.fr||'');setDescriptionAr(p.description?.ar||'');setImage(null);setPublished(p.status==='published');setCat(p.category_id);window.scrollTo({top:0,behavior:'smooth'})};
+ const submitProduct=async(e:FormEvent)=>{
+  e.preventDefault();if(productSaving.current||busy)return;
+  const category=cat||cats[0]?.id||'';
+  const errors=productFormErrors({name,nameAr,price,category,description,descriptionAr,photo:image,existingImage:edit?.image||undefined},cats.map(c=>c.id));
+  setProductErrors(errors);setNotice('');
+  if(Object.keys(errors).length){
+   setProductFeedback({kind:'error',text:'Le produit n’a pas été enregistré. Corrigez les champs indiqués.'});
+   const first=productForm.current?.querySelector<HTMLElement>('[data-product-field="'+Object.keys(errors)[0]+'"]');
+   const details=first?.closest('details');if(details)details.open=true;
+   first?.focus();return;
+  }
+  productSaving.current=true;setBusy(true);
+  try{
+   if(!session)throw new Error('Votre session a expiré. Reconnectez-vous pour enregistrer ce produit.');
+   let src=edit?.image;
+   if(image){
+    if(uploadedPhoto.current?.file===image)src=uploadedPhoto.current.url;
+    else{
+     setProductFeedback({kind:'progress',text:'Préparation de la photo…'});
+     const photo=await prepareProductPhoto(image);
+     setProductFeedback({kind:'progress',text:'Envoi de la photo…'});
+     const uploaded=await backend('/uploads',session.token,{method:'POST',headers:{'Content-Type':photo.type},body:photo});
+     src=uploaded.url;uploadedPhoto.current={file:image,url:uploaded.url};
+    }
+   }
+   setProductFeedback({kind:'progress',text:'Enregistrement du produit…'});
+   const [saved]=await save('products',edit?.id||null,{name:{fr:name.trim(),ar:nameAr.trim()||name.trim()},price:Number(price.trim().replace(',','.')),category_id:category,description:{fr:description.trim(),ar:descriptionAr.trim()},image:src,status:published?'published':'draft'});
+   const confirmation=published?'Produit enregistré et visible sur le site.':'Brouillon enregistré dans votre catalogue. Activez « Afficher sur le site » pour le publier.';
+   // A failed list refresh must never turn a confirmed save into a failed save.
+   setItems(all=>[saved,...all.filter(p=>p.id!==saved.id)]);resetProduct();
+   setProductFeedback({kind:'success',text:confirmation});
+   try{setItems(await backend('/data/products',session.token));}
+   catch{setProductFeedback({kind:'success',text:confirmation+' La liste complète sera actualisée au prochain chargement.'});}
+  }catch(error){setProductFeedback({kind:'error',text:error instanceof Error?error.message:'Enregistrement impossible. Vos champs sont conservés.'});}
+  finally{productSaving.current=false;setBusy(false);}
+ };
  if(checking)return <main className="admin-panel admin-login" aria-busy="true"><p className="eyebrow">OHH ZAZ · STUDIO</p><h1>Votre espace salon.</h1><p role="status">Vérification de votre session…</p></main>;
  if(!backendReady)return <main className="admin-panel"><Link href="/fr">← OHH ZAZ</Link><h1>Administration</h1><p className="admin-notice">La connexion sécurisée au serveur est indisponible. Contactez le propriétaire du site.</p></main>;
  if(!session)return <main className="admin-panel admin-login"><Link href="/fr">← OHH ZAZ</Link><h1>Votre espace salon.</h1><p>Connexion réservée aux comptes invités par le propriétaire.</p><form onSubmit={e=>{e.preventDefault();void run(async()=>{const result=await backend('/auth/login',null,{method:'POST',body:JSON.stringify({email,password})});setPassword('');await load('session');setSession({token:'session',role:result.role})},'Connexion établie.')}}><label>E-mail<input type="email" required autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)}/></label><label>Mot de passe<input type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/></label><button disabled={busy} className="button">{busy?'Connexion…':'Se connecter'}</button></form><p role="status">{notice}</p></main>;
  return <main className="admin-panel"><header className="admin-heading"><div className="admin-topline"><span className="eyebrow">OHH ZAZ · STUDIO</span><Link href="/fr">Voir le site <ArrowUpRight size={16}/></Link></div><h1>Le salon, à jour.</h1><p className="admin-session"><ShieldCheck size={16}/>{session.role==='admin'?'Administrateur':'Manager'} · Session sécurisée de 8 heures. Déconnectez-vous sur un appareil partagé.</p><button className="text-link admin-logout" onClick={()=>void run(async()=>{await backend('/auth/logout',session.token,{method:'POST'});setSession(null);setItems([]);setCats([]);setLinks([]);resetProduct()},'Déconnexion effectuée.')}><LogOut size={16}/>Se déconnecter</button></header><div className="admin-overview"><div><Package size={20}/><strong>{items.filter(p=>p.status==='published').length}</strong><span>Produits visibles</span></div><div><Layers size={20}/><strong>{items.filter(p=>p.status==='draft').length}</strong><span>Brouillons</span></div><div><Scissors size={20}/><strong>{groups.reduce((n,g)=>n+g.items.length,0)}</strong><span>Prestations</span></div></div><div className="admin-tabs">{[['products','Produits'],['categories','Catégories'],['services','Tarifs'],...(session.role==='admin'?[['contacts','Contacts & réseaux'],['reviews','Avis']]:[])].map(([id,label])=><button key={id} aria-pressed={tab===id} disabled={busy} onClick={()=>{setTab(id);setNotice('')}}>{id==='products'?<Package size={17}/>:id==='categories'?<Layers size={17}/>:id==='services'?<Scissors size={17}/>:<Link2 size={17}/>} {label}</button>)}</div><p role="status" className="admin-status">{busy?'Enregistrement en cours…':notice}</p>
  {tab==='reviews'&&session.role==='admin'&&<AdminReviews/>}
- {tab==='products'&&<><h2>{edit?'Modifier le produit':'Créer un produit'}</h2><form onSubmit={submitProduct}><p className="admin-form-intro">Une photo, un nom, un prix. Publiez quand votre fiche est prête.</p>{(preview||edit?.image)&&<img className="admin-product-preview" src={preview||edit?.image||''} alt="Aperçu de la photo du produit"/>}<label>Photo {edit?'(facultatif pour conserver la photo)':''}<input key={`${edit?.id||'new'}-${uploadVersion}`} type="file" accept="image/jpeg,image/png,image/webp" required={!edit} onChange={e=>setImage(e.target.files?.[0]||null)}/></label><div className="admin-pair"><label>Nom<input required maxLength={160} value={name} onChange={e=>setName(e.target.value)}/></label><label>Nom arabe (facultatif)<input dir="rtl" maxLength={160} value={nameAr} onChange={e=>setNameAr(e.target.value)}/></label></div><div className="admin-pair"><label>Prix en DH<input required type="number" min="0" step="0.01" value={price} onChange={e=>setPrice(e.target.value)}/></label><label>Catégorie<select required value={cat||cats[0]?.id||''} onChange={e=>setCat(e.target.value)}>{cats.map(c=><option key={c.id} value={c.id}>{c.name.fr}</option>)}</select></label></div><details><summary>Ajouter une description (facultatif)</summary><label>Description française<textarea maxLength={2000} value={description} onChange={e=>setDescription(e.target.value)}/></label><label>Description arabe<textarea dir="rtl" maxLength={2000} value={descriptionAr} onChange={e=>setDescriptionAr(e.target.value)}/></label></details><label className="inline-field"><input type="checkbox" checked={published} onChange={e=>setPublished(e.target.checked)}/>Afficher sur le site</label><button disabled={busy||!cats.length} className="button">{edit?'Enregistrer les modifications':'Créer le produit'}</button>{edit&&<button type="button" onClick={resetProduct}>Annuler</button>}</form>
+ {tab==='products'&&<><h2>{edit?'Modifier le produit':'Créer un produit'}</h2>
+ <form ref={productForm} onSubmit={submitProduct} noValidate aria-busy={busy} className="admin-product-form">
+  <fieldset disabled={busy} className="admin-product-fields">
+   <legend className="sr-only">Fiche produit</legend>
+   <p className="admin-form-intro">Une photo, un nom, un prix. Le produit reste en brouillon tant que vous n’activez pas sa publication.</p>
+   {(preview||edit?.image)&&<img className="admin-product-preview" src={preview||edit?.image||''} alt="Aperçu de la photo du produit"/>}
+   <label>Photo {edit?'(facultatif pour conserver la photo)':''}
+    <input data-product-field="photo" {...fieldProps('photo')} key={(edit?.id||'new')+'-'+uploadVersion} type="file" accept="image/jpeg,image/png,image/webp" required={!edit} onChange={e=>{uploadedPhoto.current=null;setImage(e.target.files?.[0]||null);setProductFeedback(null)}}/>
+    <small>JPG, PNG ou WebP · 20 Mo maximum. La photo est optimisée automatiquement.</small>{fieldError('photo')}
+   </label>
+   <div className="admin-pair">
+    <label>Nom<input data-product-field="name" {...fieldProps('name')} required maxLength={160} value={name} onChange={e=>setName(e.target.value)}/>{fieldError('name')}</label>
+    <label>Nom arabe (facultatif)<input data-product-field="nameAr" {...fieldProps('nameAr')} dir="rtl" maxLength={160} value={nameAr} onChange={e=>setNameAr(e.target.value)}/>{fieldError('nameAr')}</label>
+   </div>
+   <div className="admin-pair">
+    <label>Prix en DH<input data-product-field="price" {...fieldProps('price')} required type="text" inputMode="decimal" placeholder="299,90" value={price} onChange={e=>setPrice(e.target.value)}/>{fieldError('price')}</label>
+    <label>Catégorie<select data-product-field="category" {...fieldProps('category')} required value={cat||cats[0]?.id||''} onChange={e=>setCat(e.target.value)}>{!cats.length&&<option value="">Aucune catégorie disponible</option>}{cats.map(c=><option key={c.id} value={c.id}>{c.name.fr}</option>)}</select>{fieldError('category')}</label>
+   </div>
+   <details><summary>Ajouter une description (facultatif)</summary>
+    <label>Description française<textarea data-product-field="description" {...fieldProps('description')} maxLength={2000} value={description} onChange={e=>setDescription(e.target.value)}/>{fieldError('description')}</label>
+    <label>Description arabe<textarea data-product-field="descriptionAr" {...fieldProps('descriptionAr')} dir="rtl" maxLength={2000} value={descriptionAr} onChange={e=>setDescriptionAr(e.target.value)}/>{fieldError('descriptionAr')}</label>
+   </details>
+   <label className="inline-field"><input type="checkbox" checked={published} onChange={e=>setPublished(e.target.checked)}/>Afficher sur le site</label>
+  </fieldset>
+  {!cats.length&&<p className="admin-field-error">Créez une catégorie dans l’onglet « Catégories » avant d’enregistrer votre produit.</p>}
+  <div className="admin-save-actions">
+   <button type="submit" disabled={busy} className="button">{busy?'Enregistrement…':edit?'Enregistrer les modifications':published?'Créer et publier le produit':'Créer le produit'}</button>
+   {edit&&<button type="button" disabled={busy} onClick={()=>{resetProduct();setProductFeedback(null)}}>Annuler</button>}
+  </div>
+  <div className="admin-product-feedback" data-kind={productFeedback?.kind} role={productFeedback?.kind==='error'?'alert':'status'} aria-live={productFeedback?.kind==='error'?'assertive':'polite'} aria-atomic="true">{productFeedback?.text}</div>
+ </form>
  <h2>Votre catalogue</h2>{!items.length&&<p className="admin-empty">Votre premier produit apparaîtra ici. Les brouillons restent privés jusqu’à leur publication.</p>}
  {discard&&<div className="admin-discard" role="alert"><div><strong>Supprimer ce brouillon ?</strong><p>{discard.name.fr}</p><small>Cette fiche sera supprimée. Les autres produits restent disponibles.</small></div><div><button type="button" disabled={busy} onClick={()=>setDiscard(null)}>Conserver</button><button type="button" className="admin-delete" disabled={busy} onClick={discardDraft}><Trash2 size={16}/>Supprimer le brouillon</button></div></div>}
  <div className="admin-list">{items.map(p=><div className="admin-row" key={p.id}>{p.image&&<img className="admin-product-thumb" src={p.image} alt="" loading="lazy"/>}<span>{p.name.fr} · {p.price} DH · {p.status==='published'?'Visible':'Brouillon'}</span><button disabled={busy} onClick={()=>openProduct(p)}>Modifier</button>{p.status==='draft'&&<button type="button" disabled={busy} className="admin-delete" aria-label={'Supprimer le brouillon '+p.name.fr} onClick={()=>setDiscard(p)}><Trash2 size={16}/>Supprimer</button>}</div>)}</div></>}

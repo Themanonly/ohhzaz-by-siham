@@ -17,6 +17,7 @@ jobs:
       - run: node scripts/check-content.mjs
       - run: node scripts/check-indexing.mjs
       - run: node scripts/check-security.mjs
+      - run: npm run test:admin
       - run: npm run typecheck
       - run: npm run build
         env:
