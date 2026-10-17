@@ -65,15 +65,28 @@ async function handle(req:Request,{params}:{params:Promise<{path:string[]}>}){
  let values:Record<string,unknown>;
  if(table==='products'){
   if(!loc(b.name)||!Number.isFinite(b.price)||b.price<0||b.price>99999999||!['draft','published'].includes(b.status)||typeof b.category_id!=='string'||!/^\/api\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(b.image))return json({error:'Invalid product'},400);
-  if(!(await db.query('SELECT 1 FROM salon_media WHERE id=$1',[b.image.split('/').at(-1)])).rowCount)return json({error:'Upload a valid product photo first'},400);
+  const images=b.images===undefined?[b.image]:b.images;
+  if(!Array.isArray(images)||images.length<1||images.length>8||new Set(images).size!==images.length||images[0]!==b.image||images.some(v=>typeof v!=='string'||!/^\/api\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v)))return json({error:'Invalid product gallery'},400);
+  if((await db.query('SELECT id FROM salon_media WHERE id=ANY($1::uuid[])',[images.map(v=>v.split('/').at(-1))])).rowCount!==images.length)return json({error:'Upload valid product photos first'},400);
   if(b.description!=null&&(!['fr','ar'].every(l=>typeof b.description[l]==='string'&&b.description[l].length<=2000)))return json({error:'Invalid description'},400);
-  values={name:b.name,description:b.description||{fr:'',ar:''},price:b.price,category_id:b.category_id,image:b.image,status:b.status};
+  values={name:b.name,description:b.description||{fr:'',ar:''},price:b.price,category_id:b.category_id,image:b.image,...(b.images!==undefined||req.method==='POST'?{images}:{}),status:b.status};
  }else if(table==='product_categories'){if(!loc(b.name))return json({error:'Invalid category'},400);values={name:b.name};}
  else if(table==='social_links'){if(!contactIdentity(b as SocialLink))return json({error:'Invalid contact'},400);values={platform:b.platform,url:contactHref(b)};}
  else{if(!validServices(b)||!['coiffure','onglerie','maquillage','epilation','soins'].includes(b.id))return json({error:'Invalid services'},400);values={fr:b.fr,ar:b.ar,items:JSON.stringify(b.items)};}
  const fields=Object.keys(values);const args=Object.values(values);let result;
  if(req.method==='PATCH'){if(!id)return json({error:'Missing ID'},400);result=await db.query(`UPDATE ${table} SET ${fields.map((f,i)=>`${f}=$${i+1}`).join(',')} WHERE id=$${args.length+1} RETURNING *`,[...args,id]);}
- else{const recordId=table==='service_groups'?b.id:randomUUID();result=await db.query(`INSERT INTO ${table}(id,${fields.join(',')}) VALUES($1,${fields.map((_,i)=>'$'+(i+2)).join(',')}) ${table==='service_groups'?`ON CONFLICT(id) DO UPDATE SET ${fields.map(f=>`${f}=EXCLUDED.${f}`).join(',')}`:''} RETURNING *`,[recordId,...args]);}
+ else{
+  const requestId=table==='products'?req.headers.get('idempotency-key'):null;
+  if(requestId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(requestId))return json({error:'Invalid request ID'},400);
+  const recordId=table==='service_groups'?b.id:requestId||randomUUID();
+  result=await db.query(`INSERT INTO ${table}(id,${fields.join(',')}) VALUES($1,${fields.map((_,i)=>'$'+(i+2)).join(',')}) ${table==='service_groups'?`ON CONFLICT(id) DO UPDATE SET ${fields.map(f=>`${f}=EXCLUDED.${f}`).join(',')}`:requestId?'ON CONFLICT(id) DO NOTHING':''} RETURNING *`,[recordId,...args]);
+  if(requestId&&!result.rowCount){
+   // Replaying the same request returns its original record, never a duplicate.
+   // A changed payload cannot overwrite a record through the creation endpoint.
+   result=await db.query(`SELECT * FROM products WHERE id=$1 AND ${fields.map((field,i)=>`${field}=$${i+2}`).join(' AND ')}`,[recordId,...args]);
+   if(!result.rowCount)return json({error:'Creation request already used'},409);
+  }
+ }
  if(result.rowCount)invalidateCatalogue();
  return json(result.rows);
  }catch(e){const code=(e as {code?:string}).code;if(code==='23503'||code==='23505')return json({error:'Conflict'},409);if(e instanceof SyntaxError||e instanceof Error&&e.message==='size')return json({error:'Invalid request'},400);console.error('Admin request failed',code||'request');return json({error:'Request failed'},500);}

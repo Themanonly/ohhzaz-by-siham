@@ -1,6 +1,6 @@
 export type Localized = {fr:string;ar:string};
 export type ProductCategory = {id:string;name:Localized};
-export type Product = {id:string;category_id:string;name:Localized;description?:Localized;price:number|null;image:string|null;status:'placeholder'|'published'|'draft'};
+export type Product = {id:string;category_id:string;name:Localized;description?:Localized;price:number|null;image:string|null;images?:string[];status:'placeholder'|'published'|'draft'};
 export const productCategories:ProductCategory[]=[
  {id:'cosmetiques',name:{fr:'Cosmétiques',ar:'مستحضرات التجميل'}},
  {id:'cheveux',name:{fr:'Soins capillaires',ar:'العناية بالشعر'}},
@@ -15,3 +15,5 @@ export const socialLinks:SocialLink[]=[
  {id:'tiktok-main',platform:'tiktok',url:'https://www.tiktok.com/@sihamelhallaoui'},
  {id:'whatsapp-main',platform:'whatsapp',url:'https://wa.me/212775355346'}
 ];
+
+export const productImages=(p:Pick<Product,"image"|"images">):string[]=>p.images?.length?p.images:p.image?[p.image]:[];

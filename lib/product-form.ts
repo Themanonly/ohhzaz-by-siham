@@ -3,6 +3,13 @@ export const MAX_UPLOAD_BYTES = 2 * 1024 * 1024;
 export type ProductField = 'photo'|'name'|'nameAr'|'price'|'category'|'description'|'descriptionAr';
 export type ProductErrors = Partial<Record<ProductField,string>>;
 
+export function productRequestId():string {
+ const bytes=crypto.getRandomValues(new Uint8Array(16));
+ bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;
+ const hex=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
+ return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
+}
+
 export function photoError(file: Pick<File,'type'|'size'>): string | undefined {
  if (!['image/jpeg','image/png','image/webp'].includes(file.type)) return 'Choisissez une photo JPG, PNG ou WebP. Pour une photo HEIC, exportez-la en JPG.';
  if (!file.size) return 'Cette photo est vide. Choisissez un autre fichier.';
@@ -42,7 +49,13 @@ export async function prepareProductPhoto(file:File):Promise<Blob> {
   const context=canvas.getContext('2d');if(!context)throw new Error('Impossible de préparer la photo dans ce navigateur. Essayez un navigateur à jour.');
   context.drawImage(image,0,0,canvas.width,canvas.height);
   for(const quality of [.88,.76,.64]) {
-   const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,'image/webp',quality));
+   let blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,'image/webp',quality));
+   // Browsers without WebP encoding return PNG, ignoring the quality argument.
+   // Flatten on white before JPEG encoding so transparent artwork stays legible.
+   if(blob&&blob.size>MAX_UPLOAD_BYTES&&blob.type!=='image/webp'){
+    context.globalCompositeOperation='destination-over';context.fillStyle='#fff';context.fillRect(0,0,canvas.width,canvas.height);context.globalCompositeOperation='source-over';
+    blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,'image/jpeg',quality));
+   }
    if(blob&&blob.size<=MAX_UPLOAD_BYTES)return blob;
   }
   throw new Error('Cette photo reste trop volumineuse. Choisissez une version plus légère.');

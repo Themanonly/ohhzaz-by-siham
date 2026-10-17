@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run build",
     "test": "node scripts/check-indexing.mjs && node scripts/check-content.mjs && node scripts/check-security.mjs && npm run test:admin",
-    "test:admin": "node scripts/check-admin-form.mjs"
+    "test:admin": "node scripts/check-admin-form.mjs && node scripts/check-product-gallery.mjs"
   },
   "author": "Naoufal Laamouri",
   "license": "UNLICENSED",

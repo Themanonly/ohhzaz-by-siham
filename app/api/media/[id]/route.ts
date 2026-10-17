@@ -15,7 +15,7 @@ export async function GET(req:Request,{params}:{params:Promise<{id:string}>}){
  if(value!==null&&!['320','640','960','1600'].includes(value))return new Response(null,{status:400,headers});
  try{
   const db=database();
-  const meta=(await db.query("SELECT m.content_type,m.created_at,EXISTS(SELECT 1 FROM products p WHERE p.image=$2 AND p.status='published') AS published FROM salon_media m WHERE m.id=$1",[id,'/api/media/'+id])).rows[0];
+  const meta=(await db.query("SELECT m.content_type,m.created_at,EXISTS(SELECT 1 FROM products p WHERE (p.image=$2 OR $2=ANY(p.images)) AND p.status='published') AS published FROM salon_media m WHERE m.id=$1",[id,'/api/media/'+id])).rows[0];
   if(!meta)return new Response(null,{status:404,headers});
   if(!meta.published){
    const token=(await cookies()).get('ohhzaz_session')?.value;

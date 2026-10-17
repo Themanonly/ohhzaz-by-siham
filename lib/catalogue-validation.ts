@@ -8,6 +8,7 @@ export const serviceImages=new Set(['brushing','coupe','couleur','soin-cheveux',
 export function validProduct(v:unknown):v is Product{
  if(!record(v)||!text(v.id)||!text(v.category_id)||!localized(v.name)||v.status!=='published'||typeof v.price!=='number'||!Number.isFinite(v.price)||v.price<0||!text(v.image))return false;
  if(!/^\/api\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v.image))return false;
+ if(v.images!==undefined&&(!Array.isArray(v.images)||v.images.length>8||v.images.length<1||v.images[0]!==v.image||v.images.some(url=>typeof url!=='string'||!/^\/api\/media\/[0-9a-f-]{36}$/.test(url))))return false;
  return v.description==null||(record(v.description)&&typeof v.description.fr==='string'&&typeof v.description.ar==='string');
 }
 export const validCategory=(v:unknown):v is ProductCategory=>record(v)&&text(v.id)&&localized(v.name);

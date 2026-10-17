@@ -23,15 +23,19 @@ window.scrollTo=()=>{};
 const originalObjectURL=URL.createObjectURL,originalRevokeURL=URL.revokeObjectURL;
 URL.createObjectURL=()=> 'blob:private-test-photo';URL.revokeObjectURL=()=>{};
 const originalFetch=globalThis.fetch;
-let records=[],calls=[],rejectCreate=false,failRefresh=false,afterSave=false,uploadFail=false;
+let records=[],calls=[],rejectCreate=false,failRefresh=false,afterSave=false,uploadFail=false,sessionExpired=false,loseCreateResponse=false;
 globalThis.fetch=async(url,options={})=>{
- const path=String(url);const method=options.method||'GET';calls.push({path,method,body:options.body});
+ const path=String(url);const method=options.method||'GET';calls.push({path,method,body:options.body,headers:new Headers(options.headers)});
+ if(path.endsWith('/auth/login')){sessionExpired=false;return Response.json({role:'admin'});}
+ if(sessionExpired)return Response.json({error:'Expired'},{status:401});
  if(path.endsWith('/auth/session'))return Response.json({role:'admin'});
- if(path.endsWith('/uploads'))return uploadFail?Response.json({error:'Failed'},{status:500}):Response.json({url:'/api/media/test-photo'});
+ if(path.endsWith('/uploads'))return uploadFail?Response.json({error:'Failed'},{status:500}):Response.json({url:'/api/media/test-photo-'+calls.filter(c=>c.path.endsWith('/uploads')).length});
  if(path.includes('/data/products')){
   if(method==='POST'||method==='PATCH'){
    if(rejectCreate)return Response.json({error:'Rejected'},{status:400});
-   const p={...JSON.parse(options.body),id:'new-product'};records=[p];afterSave=true;return Response.json([p]);
+   const p={...JSON.parse(options.body),id:new Headers(options.headers).get('Idempotency-Key')||records[0]?.id||'new-product'};records=[p];afterSave=true;
+   if(method==='POST'&&loseCreateResponse){loseCreateResponse=false;throw new TypeError('Response lost after commit');}
+   return Response.json([p]);
   }
   if(afterSave&&failRefresh)throw new TypeError('Network failure');
   return Response.json(records);
@@ -61,10 +65,23 @@ try{
  assert.ok(form());assert.equal(form().noValidate,true);
  await submit();assert.match(document.querySelector('.admin-product-feedback').textContent,/Corrigez/);assert.equal(calls.filter(c=>c.method==='POST').length,0);assert.equal(document.activeElement.dataset.productField,'photo');
  await selectPhoto();await setValue('name','Produit test');await setValue('price','299,90');
+ sessionExpired=true;await submit();assert.equal(form(),null);assert.match(document.querySelector('[role=status]').textContent,/sans recharger/);
+ await act(async()=>{
+  for(const [type,value] of [['email','private-test@example.invalid'],['password','test-only-password']]){
+   const input=document.querySelector(`input[type=${type}]`);Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set.call(input,value);input.dispatchEvent(new window.Event('input',{bubbles:true}));
+  }
+ });
+ await act(async()=>{document.querySelector('form').dispatchEvent(new window.Event('submit',{bubbles:true,cancelable:true}));});
+ assert.ok(form());assert.equal(document.querySelector('[data-product-field=name]').value,'Produit test');assert.match(form().textContent,/photo.png/);
  uploadFail=true;await submit();assert.equal(document.querySelector('[data-product-field="name"]').value,'Produit test');assert.equal(document.querySelector('.admin-product-feedback').getAttribute('role'),'alert');assert.equal(records.length,0);
  uploadFail=false;rejectCreate=true;await submit();assert.equal(document.querySelector('[data-product-field="price"]').value,'299,90');assert.match(document.querySelector('.admin-product-feedback').textContent,/refusés/);
  const uploadCount=calls.filter(c=>c.path.endsWith('/uploads')).length;
- rejectCreate=false;failRefresh=true;await submit();
+ rejectCreate=false;loseCreateResponse=true;await submit();
+ assert.equal(document.querySelector('[data-product-field=name]').value,'Produit test');
+ const lostRequest=calls.filter(c=>c.path.endsWith('/data/products')&&c.method==='POST').at(-1);
+ failRefresh=true;await submit();
+ const retry=calls.filter(c=>c.path.endsWith('/data/products')&&c.method==='POST').at(-1);
+ assert.ok(lostRequest.headers.get('Idempotency-Key'));assert.equal(retry.headers.get('Idempotency-Key'),lostRequest.headers.get('Idempotency-Key'));
  assert.equal(calls.filter(c=>c.path.endsWith('/uploads')).length,uploadCount,'Retry must reuse a successfully uploaded photo');
  assert.equal(records[0].price,299.90);assert.equal(records[0].status,'draft');
  assert.equal(document.querySelector('[data-product-field="name"]').value,'');
@@ -77,6 +94,20 @@ try{
  assert.equal(calls.filter(c=>c.method==='PATCH').length,before+1,'Repeated clicks must not send duplicate mutations');
  assert.equal(records[0].status,'published');assert.match(document.querySelector('.admin-product-feedback').textContent,/visible sur le site/);
  assert.equal(document.querySelector('.admin-product-fields').disabled,false);
+ // Multiple selection, cover ordering, removal and editing keep one product.
+ failRefresh=false;
+ await act(async()=>{document.querySelector('.admin-row button').click();});
+ await selectPhoto();await selectPhoto();
+ assert.equal(document.querySelectorAll('.admin-photo-gallery li').length,3);
+ await act(async()=>{document.querySelector('[aria-label="Avancer la photo 3"]').click();});
+ await act(async()=>{document.querySelector('[aria-label="Avancer la photo 2"]').click();});
+ await submit();
+ assert.equal(records[0].images.length,3);assert.equal(records[0].image,records[0].images[0]);assert.equal(new Set(records[0].images).size,3);
+ const kept=records[0].images.filter((_,i)=>i!==1);
+ await act(async()=>{document.querySelector('.admin-row button').click();});
+ await act(async()=>{document.querySelector('[aria-label="Retirer la photo 2"]').click();});
+ const beforeEditUploads=calls.filter(c=>c.path.endsWith('/uploads')).length;
+ await submit();assert.deepEqual(records[0].images,kept);assert.equal(calls.filter(c=>c.path.endsWith('/uploads')).length,beforeEditUploads);
  // Reopening the component reads persisted records instead of losing them.
  failRefresh=false;await act(async()=>{root.unmount();});
  const reloaded=createRoot(document.getElementById('root'));await act(async()=>{reloaded.render(React.createElement(AdminPanel,{backendReady:true}));});
@@ -86,5 +117,5 @@ try{
  const timeout=AbortSignal.timeout;AbortSignal.timeout=undefined;
  try{assert.equal((await backend('/auth/session',null)).role,'admin');}finally{AbortSignal.timeout=timeout;}
  globalThis.fetch=async()=>new Response('',{status:413});await assert.rejects(backend('/uploads',null),e=>e instanceof AdminApiError&&/volumineuse/.test(e.message));
- console.log('PASS: real admin form events, visible validation, decimal comma prices, upload/save failures preserve input, upload retry reuse, confirmed save survives refresh failure, persisted reload, older browser transport and oversized upload feedback.');
+ console.log('PASS: form events, validation, decimal prices, failed upload/save input retention, session-expiry recovery with photo retained, stable retry IDs, upload reuse, saved-record reconciliation, reload, publish, repeated clicks and compatible transport.');
 }finally{globalThis.fetch=originalFetch;URL.createObjectURL=originalObjectURL;URL.revokeObjectURL=originalRevokeURL;dom.window.close();await rm(dir,{recursive:true,force:true});}

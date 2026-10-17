@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import {useState, useRef, useEffect} from 'react';
 import {ArrowUpRight, Search, X, Wind, Sparkles, Brush, Droplets, ChevronDown,ZoomIn,ZoomOut} from 'lucide-react';
-import {products as defaults, productCategories as defaultCategories, type Product, type ProductCategory} from '../data/catalogue';
+import {products as defaults, productCategories as defaultCategories, productImages, type Product, type ProductCategory} from '../data/catalogue';
 import ContactAction from './ContactAction';
 
 const normalize = (value:string) => value.normalize('NFD').replace(/[\u0300-\u036f\u064B-\u065F\u0670]/g, '').replace(/[أإآ]/g, 'ا').toLowerCase();
@@ -20,6 +20,7 @@ export default function Products({locale, teaser=false, items=defaults, categori
   const [category, setCategory] = useState('all');
   const [sort, setSort] = useState('featured');
   const [selected, setSelected] = useState<Product|null>(null);
+  const [photoIndex,setPhotoIndex]=useState(0);
   const [expandedImage,setExpandedImage]=useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const zoomButton=useRef<HTMLButtonElement>(null);
@@ -29,7 +30,7 @@ export default function Products({locale, teaser=false, items=defaults, categori
 
   useEffect(() => {
     if (!selected) return;
-    setExpandedImage(false);
+    setExpandedImage(false);setPhotoIndex(0);
     const element = dialog.current;
     element?.showModal();
     const prior = document.body.style.overflow;
@@ -59,8 +60,9 @@ export default function Products({locale, teaser=false, items=defaults, categori
 
   const art = (product:Product, detail=false) => {
     const Icon = product.category_id === 'appareils' ? Wind : product.category_id === 'brosses' ? Brush : product.category_id === 'cheveux' ? Droplets : Sparkles;
-    return product.image
-      ? <img src={product.image} srcSet={product.image.startsWith('/api/media/')?`${product.image}?w=320 320w, ${product.image}?w=640 640w, ${product.image}?w=960 960w, ${product.image}?w=1600 1600w`:undefined} sizes={detail?(expandedImage?'90vw':'(max-width: 600px) 94vw, 520px'):'(max-width: 600px) 88vw, (max-width: 1000px) 44vw, 425px'} alt={name(product)} width="600" height="600" loading={detail ? 'eager' : 'lazy'} decoding="async"/>
+    const source=detail?(productImages(product)[photoIndex]||product.image):product.image;
+    return source
+      ? <img src={source} srcSet={source.startsWith('/api/media/')?`${source}?w=320 320w, ${source}?w=640 640w, ${source}?w=960 960w, ${source}?w=1600 1600w`:undefined} sizes={detail?(expandedImage?'90vw':'(max-width: 600px) 94vw, 520px'):'(max-width: 600px) 88vw, (max-width: 1000px) 44vw, 425px'} alt={name(product)} width="600" height="600" loading={detail ? 'eager' : 'lazy'} decoding="async"/>
       : <div className="catalogue-placeholder" aria-hidden="true"><Icon strokeWidth={.8}/><span>OHH ZAZ</span></div>;
   };
   const description = selected?.description?.[locale] || selected?.description?.fr || '';
@@ -99,7 +101,11 @@ export default function Products({locale, teaser=false, items=defaults, categori
         {selected && <>
           <div className="product-dialog-header">{expandedImage?<button type="button" ref={returnButton} className="product-image-return" onClick={()=>setExpandedImage(false)}><ZoomOut size={17}/>{ar?'الرجوع إلى المنتج':'Retour au produit'}</button>:<span>OHH ZAZ <span aria-hidden="true">/</span> {ar ? 'اختيار الصالون' : 'La sélection'}</span>}<button type="button" className="dialog-close" onClick={() => setSelected(null)} aria-label={ar ? 'إغلاق' : 'Fermer'} autoFocus><X/></button></div>
           <div className={`product-dialog-body${expandedImage?' is-image-expanded':''}`}>
-            <div className="product-dialog-image">{art(selected, true)}{selected.image&&!expandedImage&&<button type="button" ref={zoomButton} className="product-image-zoom" onClick={()=>setExpandedImage(true)}><ZoomIn size={17}/><span>{ar?'تكبير الصورة':'Agrandir la photo'}</span></button>}</div>
+            <div className="product-dialog-image"><div className="product-gallery-stage">{art(selected, true)}</div>{selected.image&&!expandedImage&&<button type="button" ref={zoomButton} className="product-image-zoom" onClick={()=>setExpandedImage(true)}><ZoomIn size={17}/><span>{ar?'تكبير الصورة':'Agrandir la photo'}</span></button>}
+            {productImages(selected).length>1&&<div className="product-gallery-picker" role="group" aria-label={ar?'صور المنتج':'Photos du produit'}>
+             {productImages(selected).map((src,index)=><button type="button" key={src} aria-pressed={index===photoIndex} aria-label={ar?`الصورة ${index+1}`:`Photo ${index+1}`} onClick={()=>setPhotoIndex(index)}><img src={`${src}?w=320`} alt="" width="60" height="60" loading="lazy"/></button>)}
+             <span aria-live="polite">{photoIndex+1} / {productImages(selected).length}</span>
+            </div>}</div>
             <div className="product-dialog-copy" hidden={expandedImage}>
               <p className="eyebrow">{selected.status === 'placeholder' ? (ar ? 'قريباً' : 'PROCHAINEMENT') : categoryName(selected)}</p>
               <h2 id="product-detail-title">{displayName(selected)}</h2>
