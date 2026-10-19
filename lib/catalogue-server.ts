@@ -17,3 +17,11 @@ export async function getCatalogue(){
  try{return await readCatalogue(createHash('sha256').update(process.env.DATABASE_URL!).digest('hex'));}
  catch{console.error('Catalogue database unavailable');return {items:products,categories:productCategories,contacts:[],serviceGroups};}
 }
+
+// Product URLs must never resolve to private drafts or catalogue placeholders.
+export async function getPublishedProduct(id:string){
+ if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)||!databaseReady())return null;
+ const catalogue=await readCatalogue(createHash('sha256').update(process.env.DATABASE_URL!).digest('hex'));
+ const product=catalogue.items.find(p=>p.id===id&&p.status==='published');
+ return product?{product,catalogue}:null;
+}

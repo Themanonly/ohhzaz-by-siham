@@ -1,46 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import {useState, useRef, useEffect} from 'react';
-import {ArrowUpRight, Search, X, Wind, Sparkles, Brush, Droplets, ChevronDown,ZoomIn,ZoomOut} from 'lucide-react';
-import {products as defaults, productCategories as defaultCategories, productImages, type Product, type ProductCategory} from '../data/catalogue';
-import ContactAction from './ContactAction';
+import {useState} from 'react';
+import {ArrowUpRight, Search, X, Wind, Sparkles, Brush, Droplets} from 'lucide-react';
+import {products as defaults, productCategories as defaultCategories, type Product, type ProductCategory} from '../data/catalogue';
+import {productPath} from '../lib/product-links';
 
 const normalize = (value:string) => value.normalize('NFD').replace(/[\u0300-\u036f\u064B-\u065F\u0670]/g, '').replace(/[أإآ]/g, 'ا').toLowerCase();
-
-function descriptionPreview(value:string) {
-  if (value.length <= 240) return value;
-  const openingSentence = value.match(/^.{60,240}?[.!؟?](?:\s|$)/u)?.[0]?.trim();
-  return openingSentence || `${value.slice(0, 220).replace(/\s+\S*$/, '').trim()}…`;
-}
 
 export default function Products({locale, teaser=false, items=defaults, categories=defaultCategories}:{locale:'fr'|'ar';teaser?:boolean;items?:Product[];categories?:ProductCategory[]}) {
   const ar = locale === 'ar';
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
   const [sort, setSort] = useState('featured');
-  const [selected, setSelected] = useState<Product|null>(null);
-  const [photoIndex,setPhotoIndex]=useState(0);
-  const [expandedImage,setExpandedImage]=useState(false);
-  const dialog = useRef<HTMLDialogElement>(null);
-  const zoomButton=useRef<HTMLButtonElement>(null);
-  const returnButton=useRef<HTMLButtonElement>(null);
-  const wasExpanded=useRef(false);
-  useEffect(()=>{if(expandedImage)returnButton.current?.focus();else if(wasExpanded.current)zoomButton.current?.focus();wasExpanded.current=expandedImage;},[expandedImage]);
-
-  useEffect(() => {
-    if (!selected) return;
-    setExpandedImage(false);setPhotoIndex(0);
-    const element = dialog.current;
-    element?.showModal();
-    const prior = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      element?.close();
-      document.body.style.overflow = prior;
-    };
-  }, [selected]);
-
   const name = (product:Product) => product.name[locale] || product.name.fr;
   const displayName = (product:Product) => ar ? name(product).split(/(\([A-Za-z][^)]*\)|[A-Za-z][A-Za-z0-9]*(?:\s+[A-Za-z0-9]+)*|\d+(?:[.,]\d+)*)/g).map((part,index)=>/^[A-Za-z0-9(]/.test(part)?<bdi dir="ltr" key={index}>{part}</bdi>:part) : name(product);
   const categoryName = (product:Product) => {
@@ -58,20 +30,13 @@ export default function Products({locale, teaser=false, items=defaults, categori
       : sort === 'high' ? (b.price ?? -Infinity) - (a.price ?? -Infinity)
       : sort === 'name' ? name(a).localeCompare(name(b), locale) : 0);
 
-  const art = (product:Product, detail=false) => {
+  const art = (product:Product) => {
     const Icon = product.category_id === 'appareils' ? Wind : product.category_id === 'brosses' ? Brush : product.category_id === 'cheveux' ? Droplets : Sparkles;
-    const source=detail?(productImages(product)[photoIndex]||product.image):product.image;
+    const source=product.image;
     return source
-      ? <img src={source} srcSet={source.startsWith('/api/media/')?`${source}?w=320 320w, ${source}?w=640 640w, ${source}?w=960 960w, ${source}?w=1600 1600w`:undefined} sizes={detail?(expandedImage?'90vw':'(max-width: 600px) 94vw, 520px'):'(max-width: 600px) 88vw, (max-width: 1000px) 44vw, 425px'} alt={name(product)} width="600" height="600" loading={detail ? 'eager' : 'lazy'} decoding="async"/>
+      ? <img src={source} srcSet={source.startsWith('/api/media/')?`${source}?w=320 320w, ${source}?w=640 640w, ${source}?w=960 960w, ${source}?w=1600 1600w`:undefined} sizes='(max-width: 600px) 88vw, (max-width: 1000px) 44vw, 425px' alt={name(product)} width="600" height="600" loading="lazy" decoding="async"/>
       : <div className="catalogue-placeholder" aria-hidden="true"><Icon strokeWidth={.8}/><span>OHH ZAZ</span></div>;
   };
-  const description = selected?.description?.[locale] || selected?.description?.fr || '';
-  const orderMessage = selected ? (selected.status === 'published'
-    ? (ar
-      ? `مرحباً، أود طلب ${name(selected)}${selected.price === null ? '' : `، بالسعر المعروض ${price(selected)}`}. هل هو متوفّر؟ وكيف يمكنني استلام طلبي؟`
-      : `Bonjour, je souhaite commander ${name(selected)}${selected.price === null ? '' : ` au prix affiché de ${price(selected)}`}. Est-il disponible ? Comment puis-je récupérer ma commande ?`)
-    : (ar ? `مرحباً، أود معرفة موعد توفّر ${name(selected)}.` : `Bonjour, je souhaite connaître la disponibilité prochaine de ${name(selected)}.`)) : '';
-
   return <section className={`section products catalogue-refined ${teaser ? 'products-teaser' : 'page-start'}`} data-scroll-key="products">
     <div className="section-heading">
       <div><p className="eyebrow">{ar ? 'اختيار الصالون' : 'LA SÉLECTION DU SALON'}</p>
@@ -91,31 +56,13 @@ export default function Products({locale, teaser=false, items=defaults, categori
       </div>
       <div className="catalogue-results"><p className="catalogue-count" role="status">{visible.length} {ar ? 'نتيجة' : visible.length === 1 ? 'produit' : 'produits'}</p>{(query || category !== 'all') && <button className="text-link" onClick={clearFilters}><X size={14}/>{ar ? 'مسح الفلاتر' : 'Effacer les filtres'}</button>}</div>
       {visible.length ? <div className={`catalogue-grid${visible.length === 1 ? ' catalogue-grid--single' : ''}`}>
-        {visible.map(product => <button type="button" className="catalogue-card" data-category={product.category_id} key={product.id} onClick={() => setSelected(product)} aria-haspopup="dialog" aria-label={`${ar ? 'تفاصيل' : 'Découvrir'} ${name(product)}`}>
+        {visible.map(product => <Link href={product.status==='published'?productPath(locale,product.id):`/${locale}/contact`} className="catalogue-card" data-category={product.category_id} key={product.id} aria-label={`${ar ? 'تفاصيل' : 'Découvrir'} ${name(product)}`}>
           <div className="catalogue-image">{art(product)}{product.status === 'placeholder' && <span className="catalogue-badge">{ar ? 'قريباً' : 'PROCHAINEMENT'}</span>}<span className="catalogue-arrow"><ArrowUpRight aria-hidden="true"/></span></div>
           <div className="catalogue-copy">{product.status !== 'placeholder' && <p className="catalogue-category">{categoryName(product)}</p>}<h2 title={name(product)}>{displayName(product)}</h2><p className="catalogue-price"><bdi>{price(product)}</bdi></p><span>{ar ? 'اكتشاف المنتج' : 'Voir le produit'}<ArrowUpRight size={15} aria-hidden="true"/></span></div>
-        </button>)}
+        </Link>)}
       </div> : <div className="catalogue-empty"><h2>{ar ? 'ما لقينا حتى نتيجة.' : 'Aucun résultat pour cette recherche.'}</h2><p>{ar ? 'جرّبي كلمة أخرى أو شوفي جميع الفئات.' : 'Essayez un autre mot ou parcourez toutes les catégories.'}</p><button className="button" onClick={clearFilters}>{ar ? 'مسح البحث' : 'Effacer les filtres'}</button></div>}
 
-      <dialog className="product-dialog product-dialog-refined" ref={dialog} aria-labelledby={selected ? 'product-detail-title' : undefined} onCancel={() => setSelected(null)} onClick={event => {if (event.target === event.currentTarget) setSelected(null);}}>
-        {selected && <>
-          <div className="product-dialog-header">{expandedImage?<button type="button" ref={returnButton} className="product-image-return" onClick={()=>setExpandedImage(false)}><ZoomOut size={17}/>{ar?'الرجوع إلى المنتج':'Retour au produit'}</button>:<span>OHH ZAZ <span aria-hidden="true">/</span> {ar ? 'اختيار الصالون' : 'La sélection'}</span>}<button type="button" className="dialog-close" onClick={() => setSelected(null)} aria-label={ar ? 'إغلاق' : 'Fermer'} autoFocus><X/></button></div>
-          <div className={`product-dialog-body${expandedImage?' is-image-expanded':''}`}>
-            <div className="product-dialog-image"><div className="product-gallery-stage">{art(selected, true)}</div>{selected.image&&!expandedImage&&<button type="button" ref={zoomButton} className="product-image-zoom" onClick={()=>setExpandedImage(true)}><ZoomIn size={17}/><span>{ar?'تكبير الصورة':'Agrandir la photo'}</span></button>}
-            {productImages(selected).length>1&&<div className="product-gallery-picker" role="group" aria-label={ar?'صور المنتج':'Photos du produit'}>
-             {productImages(selected).map((src,index)=><button type="button" key={src} aria-pressed={index===photoIndex} aria-label={ar?`الصورة ${index+1}`:`Photo ${index+1}`} onClick={()=>setPhotoIndex(index)}><img src={`${src}?w=320`} alt="" width="60" height="60" loading="lazy"/></button>)}
-             <span aria-live="polite">{photoIndex+1} / {productImages(selected).length}</span>
-            </div>}</div>
-            <div className="product-dialog-copy" hidden={expandedImage}>
-              <p className="eyebrow">{selected.status === 'placeholder' ? (ar ? 'قريباً' : 'PROCHAINEMENT') : categoryName(selected)}</p>
-              <h2 id="product-detail-title">{displayName(selected)}</h2>
-              <p className="product-detail-price"><bdi>{price(selected)}</bdi></p>
-              {description ? <div className="product-description" key={selected.id}><p>{descriptionPreview(description)}</p>{description.length > 240 && <details><summary>{ar ? 'الوصف الكامل' : 'Description complète'}<ChevronDown size={16} aria-hidden="true"/></summary><p>{description}</p></details>}</div> : selected.status === 'placeholder' ? <p>{ar ? 'التشكيلة قيد التحضير.' : 'Notre sélection est en préparation.'}</p> : null}
-            </div>
-          </div>
-          <div className="product-order-bar"><div><span className="product-order-label">{ar ? 'مباشرة من الصالون' : 'Directement auprès du salon'}</span><small>{selected.status === 'published' ? (ar ? 'التوفّر والاستلام يتم تأكيدهما عبر واتساب.' : 'Disponibilité et retrait à confirmer sur WhatsApp.') : (ar ? 'تعرفي على الإطلاق القادم.' : 'Renseignez-vous sur le prochain lancement.')}</small></div><ContactAction platform="whatsapp" locale={locale} message={orderMessage} className="button product-order-button">{selected.status === 'published' ? (ar ? 'اطلبي عبر واتساب' : 'Commander sur WhatsApp') : (ar ? 'معرفة المزيد' : 'En savoir plus')}</ContactAction></div>
-        </>}
-      </dialog>
+
     </>}
   </section>;
 }

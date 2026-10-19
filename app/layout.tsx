@@ -18,3 +18,5 @@ import './mobile-hero.css';
 import './bridal-refinement.css';
 import './bridal-audio.css';
 import './catalogue-refinement.css';
+
+import './product-detail.css';
