@@ -6,6 +6,7 @@ import {productImages,type Product,type ProductCategory} from '../data/catalogue
 import {siteUrl} from '../lib/site';
 import {productPath} from '../lib/product-links';
 import ContactAction from './ContactAction';
+import {AddToCart} from './CartProvider';
 
 export default function ProductDetail({product,categories,locale}:{product:Product;categories:ProductCategory[];locale:'fr'|'ar'}){
  const ar=locale==='ar',images=productImages(product),name=product.name[locale]||product.name.fr;
@@ -33,7 +34,7 @@ export default function ProductDetail({product,categories,locale}:{product:Produ
     {images.length>1&&<div className="pdp-thumbnails" role="group" aria-label={ar?'اختيار صورة':'Choisir une photo'}>{images.map((src,i)=><button key={src} type="button" aria-pressed={i===index} aria-label={ar?`الصورة ${i+1}`:`Photo ${i+1}`} onClick={()=>setIndex(i)}><img src={src.startsWith('/api/media/')?`${src}?w=320`:src} width={80} height={80} alt="" loading="lazy"/></button>)}</div>}
    </section>
    <div className="pdp-information"><p className="eyebrow">{category?.[locale]||category?.fr||'OHH ZAZ'}</p><h1 dir="auto">{name}</h1><p className="pdp-price"><bdi>{price}</bdi></p>
-    <div className="pdp-purchase"><ContactAction platform="whatsapp" locale={locale} message={orderMessage} className="button">{ar?'اطلبي عبر واتساب':'Commander sur WhatsApp'}</ContactAction><p>{ar?'التوفّر والاستلام يتم تأكيدهما مع الصالون.':'Disponibilité et retrait à confirmer avec le salon.'}</p></div>
+    <div className="pdp-purchase"><AddToCart id={product.id} locale={locale}/><ContactAction platform="whatsapp" locale={locale} message={orderMessage} className="text-link cart-direct">{ar?'اطلبي عبر واتساب':'Commander sur WhatsApp'}</ContactAction><p>{ar?'التوفّر والاستلام يتم تأكيدهما مع الصالون.':'Disponibilité et retrait à confirmer avec le salon.'}</p></div>
     {description&&<div className="pdp-description"><h2>{ar?'عن المنتج':'À propos de ce produit'}</h2><p dir="auto">{description}</p></div>}
     <button type="button" className="text-link pdp-share" onClick={()=>void copyLink()}>{copied?<Check size={17}/>:<LinkIcon size={17}/>}<span aria-live="polite">{copied?(ar?'تم نسخ الرابط':'Lien copié'):(ar?'نسخ رابط المنتج':'Copier le lien du produit')}</span></button>{copyError&&<p role="status">{ar?'يمكنك نسخ الرابط من شريط العنوان.':'Vous pouvez copier le lien dans la barre d’adresse.'}</p>}
    </div>

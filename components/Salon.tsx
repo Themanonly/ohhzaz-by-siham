@@ -11,6 +11,7 @@ import VideoHero from './VideoHero';
 import ServiceDiscovery from './ServiceDiscovery';
 import SalonInterior from './SalonInterior';
 import Header from './Header';
+import CartDrawer from './CartDrawer';
 import BridalExperience from './BridalExperience';
 import Products from './Products';
 import ProductDetail from './ProductDetail';
@@ -34,7 +35,7 @@ return <ContactsContext.Provider value={contacts}><a className="skip" href="#mai
 {page==='contact'&&<section className="contact section page-start" data-scroll-key="contact"><p className="eyebrow">OHH ZAZ · BY SIHAM</p><h1>{t.contactTitle}</h1><p>{t.contactBody}</p><div className="contact-platforms"><ContactAction platform="whatsapp" locale={locale} className="button">WhatsApp</ContactAction><ContactAction platform="instagram" locale={locale}>Instagram</ContactAction><ContactAction platform="tiktok" locale={locale}>TikTok</ContactAction></div><div className="contact-location"><MapPin/><span dir="ltr">n°24, Bd Sidi Mohamed Ben Abdellah<br/>Casablanca 20330</span></div><a className="text-link directions-link" href={business.mapUrl} target="_blank" rel="noopener noreferrer">{ar?'الاتجاهات إلى الصالون':'Itinéraire vers le salon'}<ArrowUpRight size={16}/></a><OpeningHours locale={locale}/></section>}
 {(page==='contact'||page==='mariee')&&<section className="section faq" data-scroll-key="faq"><p className="eyebrow">{t.faq}</p>{t.questions.map((q,i)=>(page==='mariee'&&i!==1)?null:<div className="faq-item" key={q}><button onClick={()=>setFaq(faq===i?null:i)} aria-expanded={faq===i} aria-controls={`faq-${i}`}>{q}{faq===i?<Minus size={18}/>:<Plus size={18}/>}</button><div id={`faq-${i}`} hidden={faq!==i}><p>{t.answers[i]}</p></div></div>)}</section>}
 {(page===''||page==='le-salon')&&<Reviews locale={locale}/>}
-{page==='mentions-legales'&&<SiteInformation locale={locale}/>}</main><Footer locale={locale} page={page}/></ContactsContext.Provider>}
+{page==='mentions-legales'&&<SiteInformation locale={locale}/>}</main><Footer locale={locale} page={page}/><CartDrawer locale={locale}/></ContactsContext.Provider>}
 
 
 
